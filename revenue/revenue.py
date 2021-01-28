@@ -43,11 +43,11 @@ class Revenue:
     def rev_type_hardcode(rev_type : str):
         switcher = {
             'total' : 'total',
-            'general_waste' : ['BR1','BR2','BR3','DOY','FL2','FLG','RL1','RL2','RL4','RL7','RL9','RLD','RLE','RLH','RLI','RLJ','RLK','SWG'],
-            'cardboard' : ['FLP','HYG','RED','RL5','RL6','RL8','RLP','RLR','SWP'],
-            'comingled' : ['CBK','RLC','RLG'],
-            'subContractor' : ['ALLMED','BIN','CKG','CLN','GRACE','JJR','OWE','REM','REP','REQ','RRNW','RRR','SHR','SPD','SUE','URM','VEO','VEOACT','VTG'],
-            'uos' : ['UOSCB','UOSCO','UOSGW','CMDCB','CMDGW','CUMCB','CUMGW','NEPGW']
+            'general_waste' : ['HOOK1','BR1','BR2','BR3','FL2','FLG','RL1','RL2','RL4','RL7','RL9','RLD','RLE','RLH','RLI','RLJ','RLK','SWG','AUSSKIP'],
+            'cardboard' : ['GRIMA','APR','FLP','HYG','RED','RL5','RL6','RL8','RLP','RLR','SWP'],
+            'comingled' : ['CBK','RLC','RLG','DOY'],
+            'subContractor' : ['SUB','JJT','ALLMED','BIN','CKG','CLN','GRACE','JJR','OWE','REM','REP','REQ','RRNW','RRR','SHR','SPD','SUE','URM','VEO','VEOACT','VTG'],
+            'uos' : ['NEPCB','UOSCB','UOSCO','UOSGW','CMDCB','CMDGW','CUMCB','CUMGW','NEPGW']
         }
         rev_routes = switcher.get(rev_type, "invalid entry")
         return rev_routes
