@@ -1,5 +1,6 @@
 # Report system
 
+#### important => Weekly reporting period from Wednesday to Tuesday
 
     Date : 19.01.2021 
 

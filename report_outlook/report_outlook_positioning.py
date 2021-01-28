@@ -30,7 +30,7 @@ class Report_outlook_positioning:
     # How type object, wb as xlwings workbook
     def format_ws_font_style_to_arial(wb, ws_name : str):
         ws = wb.sheets[ws_name]
-        ws.range("A:AI").api.Font.Name = "Arial"
+        ws.range("A:DA").api.Font.Name = "Arial"
 
     # Format Report Headers 
     # date index / date string or date object
@@ -57,8 +57,11 @@ class Report_outlook_positioning:
         income_title = ws.range('B4')
         income_title.value = "Income"
         income_title.api.Font.Bold = True
-        total_revenue_title = ws.range('B5')
-        total_revenue_title.value = "Total Revenue"
+        total_revenue_title = ws.range('B6')
+        # =================================================================
+        # Total Rev title 
+        total_revenue_title.value = "Total Revenue from Waste Edge"
+        # ===================================================================
         total_revenue_title.offset(column_offset=7).value = total_revenue
         
         # Route numbers List
@@ -70,18 +73,20 @@ class Report_outlook_positioning:
         # It would designed as offset by one Cell location
         # So to be flexiblely replace by Cell location
         # Anchor Cell as B5 as Total Revenue title cell 
-    def format_report_content_rev_by_route_num(
+    def routes_rev_display_vertical(
         wb, 
         ws_name : str,
         route_nums = [],
         route_nums_figure = [],
-        anchor_cell : str = "B5"):
+        anchor_cell : str = "B6"):
 
         ws = wb.sheets[ws_name]
+        # anchor_cell => Revenue label 
         anchor_cell_loc = ws.range(anchor_cell)
-        # down 1 and left 1 By B5
+        # down 1 and left 1 By B6
         rev_by_route_num_title = anchor_cell_loc.offset(row_offset=1, column_offset=1)
         rev_by_route_num_title.value = "By Route Number"
+        rev_by_route_num_title.api.Font.Bold = True
         
         # down 1 and left 1 By Route Number title 
         start_of_route_nums = rev_by_route_num_title.offset(row_offset=1, column_offset=1)
@@ -96,11 +101,72 @@ class Report_outlook_positioning:
         start_of_route_nums_figure.value = route_nums_figure
         # ======================================================
 
+    def routes_rev_display_horizontal(           
+        wb, 
+        ws_name : str,
+        route_nums = [],
+        route_nums_figure = [],
+        anchor_cell : str = "B4"):
+
+        # col 9 
+        ws = wb.sheets[ws_name]
+        # anchor_cell => Income Label
+        anchor_cell_loc = ws.range(anchor_cell)
+        # Left 9
+        rev_by_route_num_title = anchor_cell_loc.offset(column_offset=9)
+        rev_by_route_num_title.value = "By Route Number"
+        rev_by_route_num_title.api.Font.Bold = True
+        
+        # down 1 and left 1 By Route Number title 
+        start_of_route_nums = rev_by_route_num_title.offset(row_offset=1)
+        start_of_route_nums.value = route_nums
+        # ======================================================
+        # Money figures Offset Left 4 by the starting of 
+        # To make 100% sure the figure is matching the route 
+        # use for loop or list comp to each out the money figure
+        # correspond it to the route number
+        # but I will just list it out, as time constriant
+        start_of_route_nums_figure = start_of_route_nums.offset(row_offset=1)
+        start_of_route_nums_figure.value = route_nums_figure
+        # ======================================================
+
     # Adapt it to column format 
     # type as list of str
     def transform_list_to_nested_list(list_of_values):
         nested_lst = [[i] for i in list_of_values]
         return nested_lst
+
+#   anchor Cell in B4
+    def display_rev_type_in_total_sheet(
+        wb,
+        rev_type_name : str,
+        total_revenue : float = 0.00, 
+        anchor_cell : str = "B4"):
+
+        # total sheet
+        ws = wb.sheets["total"]
+        anchor_cell_loc = ws.range(anchor_cell)
+        # left 1 down 3 => start with it
+        first_rev_type_title_cell = anchor_cell_loc.offset(row_offset=3,column_offset=1)
+
+        # if has value down 1
+        # When rev_type_title cell has value it moves down
+
+        def check_empty_cell(rev_name:str, target_cell:object):
+            #  starts from 0
+            if target_cell.value is None:
+                target_cell.value = rev_name
+                return target_cell
+            else:
+                new_target_cell = target_cell.offset(row_offset=1)
+                return check_empty_cell(rev_name, new_target_cell)
+
+        target_rev_title = check_empty_cell(rev_type_name,first_rev_type_title_cell)
+        
+        # Left 5 => revenue amount 
+        rev_figure = target_rev_title.offset(column_offset=5)
+        rev_figure.value = total_revenue
+
 
 
 
