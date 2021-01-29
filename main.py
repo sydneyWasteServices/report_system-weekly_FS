@@ -1,21 +1,19 @@
 from data_transform.WE_transform import WE_transform as wet
 from revenue.revenue import Revenue as rev
-from report_outlook.report_outlook_positioning import Report_outlook_positioning as rop
+# from report_outlook.report_outlook_positioning import Report_outlook_positioning as rop
 import pandas as pd
 import xlwings as xw
 import time
+from report_outlook.report_template import Report_template 
 
 # Fixed as Weds to Tues
-
 # Start with df, suppose it is querying from Wed
 # dataframe in new downloaded folder 
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
 path = "../../dataVault/waste_edge_booking_data/23.12.2020_to_26.1.2021.csv"
 
 df = pd.read_csv(path)
-
-rev_types = ['total','general_waste', 'cardboard', 'comingled', 'subContractor', 'uos']
-
+# df.drop(columns=['Schd Time Start','PO'])
 # =================================================================================
 # ==============Transform the dataframe==========================
 
@@ -40,51 +38,26 @@ series_keys = series.Price.sum().keys()
 # created name 
 # create the condiitons for creating  
 
-# ======================================================
-
+# ================================================================================
+rev_types = ['total','general_waste', 'cardboard', 'comingled', 'subContractor', 'uos']
+list_of_worksheet = ['total','general_waste', 'cardboard', 'comingled', 'subContractor', 'uos', 'weekly_fr']
 # else:
 # series[0]
 # df_date = series_keys["2021-01-13"]
-df_date = "2021-01-20"
-df_series = series.get_group(df_date)
+dates = rev(df).get_dates()
+
+
+income = rev(df).get_income_by_rev_type('total',dates[-1])
+print(income)
+
+route_inc = rev(df).get_income_per_route_by_rev_type('total',dates[-1])
+print(route_inc)
 wb = xw.Book()
-rop.create_and_name_ws_by_routes(wb, rev_types)    
+Report_template.add_sheets(wb,list_of_worksheet)
+# df_date = "2021-01-20"
+# df_series = series.get_group(df_date)
 
-[report_templates_horizontal(wb,rev_type,df_series,df_date) for rev_type in rev_types]
+# rop.create_and_name_ws_by_routes(wb, rev_types)    
+# [report_templates_horizontal(wb,rev_type,df_series,df_date) for rev_type in rev_types]
 
-
-
-# wb workbook,   series resmapled data (by 7D)
-
-
-# try catch on excel configuring
-# =============================
-# wb = xw.Book()
-# rop.format_ws_font_style_to_arial(wb,"Sheet1")
-# rop.format_headers(wb,"Sheet1")
-# rop.format_left_columns(wb,"Sheet1")
-# rop.format_report_content_total_income(wb,"Sheet1")
-# rop.format_report_content_rev_by_route_num(wb,"Sheet1",[[1],[2],[3]],[[4],[5],[6]])
-# =============================
-
-# time.sleep(5)
-# wb.close()
-# df = wet.extract_weekday(df)
-# df = wet.clean_route_num_column(df)
-# rev_general_waste = rev.extract_by_rev_type_hardcode('general_waste')
-
-# df = df[df['Route number'].isin(rev_general_waste)]
-
-# df = wet.transform_date_format(df)
-
-# df = df.sort_values(by=['Date'], inplace=True, ascending=False)
-
-
-# series = df.resample('7D')
-# 
-# df_123 = series.get_group('2020-12-02')
-
-# print(series.Price.sum())
-# print(df)
-# print(df)
 

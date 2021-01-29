@@ -8,7 +8,7 @@ import typing
 
 class Report_outlook_positioning:
     def __init__(self):
-        pass
+        return 
 
     #  Create worksheets for the workbooks
      # wb as xlwings workbook, list_of_route - List of str

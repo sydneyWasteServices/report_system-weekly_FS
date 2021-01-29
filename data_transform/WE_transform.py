@@ -72,4 +72,7 @@ class WE_transform:
         return df.sort_values(by=['Date'], inplace=True, ascending=False)
          
 
-    
+    def drop_invalid_cols(df):
+        # Sch Time End and PO are not that useful and many empty cell
+        return df.drop(columns=['Schd Time Start','PO'])
+        

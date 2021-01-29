@@ -80,7 +80,10 @@
             Endpoint for Metadata infor => rev type information => 
                 End of the day build web app to manage internal data information
 
+### 28.1.2021
 
+    Need to rearrange the app. 
+            
 
             
 
