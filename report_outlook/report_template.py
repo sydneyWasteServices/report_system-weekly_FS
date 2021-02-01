@@ -5,7 +5,7 @@ from report_outlook.report_outlook_positioning import Report_outlook_positioning
 
 class Report_template(Report_outlook_positioning):
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
         return
     # list_of_wsname  = list[str]
 
@@ -24,14 +24,14 @@ class Report_template(Report_outlook_positioning):
         for i, wsname in enumerate(list_of_wsname):
             wb.sheets[i].name = wsname
 
+# For each of Worksheet
     def paul_weekly_fr1(
             self,
             wb: object,
-            ws_name: str = "weekly_summary",
+            ws_name: str = "weekly_fr",
             start_date: str = "dd/mm/yyyy",
-            service_income: float = 0,
-            we_income_item: str = "",
-            we_income_figure: float = 0,
+            we_income_items: object = {},
+            service_income_items: object = {},
             fix_income: float = 0,
             cb_weight: float = 0,
             gw_weight: float = 0,
@@ -51,11 +51,27 @@ class Report_template(Report_outlook_positioning):
         # Header title
         # start date
         # finish date
-        super().format_weekly_fr1_header(wb, start_date)
+        super().format_weekly_fr1_header(wb, ws_name, start_date)
+
+        # B4 Anchor Shell
+        # Assume report contents are start with B4
+        # service income session
+        super().format_weekly_fr1_service_income(wb, ws_name)
+
+        # Down B4 of 6 cell, will be change to dynamic 
+        # When there are more service income item 
+        super().format_weekly_fr1_operating_income(wb, ws_name, we_income_items)
+
+        # Must be refractor as picking object key
+        # point to the value
+        super().format_weekly_fr1_operating_expense(wb, ws_name)
+         
+
+
 
     # Revenue Report template as Vectical
 
-    def report_templates_vertical1(wb: object, rev_type_name: str, series: object, df_start_date: str):
+    def report_templates_vertical1(self, wb: object, rev_type_name: str, series: object, df_start_date: str):
         total_income = 0
         route_num = []
         route_incomes = []
@@ -105,8 +121,7 @@ class Report_template(Report_outlook_positioning):
 # Revenue Report template as Horizontal
 # ======================================================
 
-
-    def report_templates_horizontal(wb: object, rev_type_name: str, series: object, df_start_date: str):
+    def report_templates_horizontal(self, wb: object, rev_type_name: str, series: object, df_start_date: str):
         total_income = 0
         route_num = []
         route_incomes = []

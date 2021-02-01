@@ -59,52 +59,82 @@ class Revenue:
 
     def get_routes(self, rev_type: str):
         list_of_route_num = self.rev_type_hardcode(rev_type)
-        # return list of string 
+        # return list of string
         return list_of_route_num
 
-
         # list of route number
+
     def filter_df_by_rev_routes(self, df: object, list_of_routes):
-        df = self.df[self.df['Route number'].isin(list_of_routes)]
+        df = df[df['Route number'].isin(list_of_routes)]
         return df
 
     def get_trucks(self):
         pass
 
-
-    def get_income_by_rev_type(self, rev_type: str, date: str = "dd/mm/yy"):
-        print("income by rev type" +rev_type)
-        print(date)
+        # category income
+    def get_income_by_rev_type(
+        self, 
+        rev_type: str, 
+        date: str = "dd/mm/yy"):
 
         series = self.df.resample('7D', kind='period')
         series_by_date = series.get_group(date)
+
         if rev_type != "total":
+
             list_of_routes = self.get_routes(rev_type)
-            df_by_rev_type = self.filter_df_by_rev_routes(series_by_date, list_of_routes)
+
+            df_by_rev_type = self.filter_df_by_rev_routes(
+                series_by_date, list_of_routes)
+
             income_by_rev_type = df_by_rev_type.Price.sum()
+
         else:
+
             income_by_rev_type = series_by_date.Price.sum()
 
-
         return income_by_rev_type
-        
+
     # returns dict route : key, income_figure : value
+
     def get_income_per_route_by_rev_type(self, rev_type: str, date: str = "dd/mm/yy"):
         series = self.df.resample('7D', kind='period')
         series_by_date = series.get_group(date)
 
         if rev_type != "total":
             list_of_routes = self.get_routes(rev_type)
-            df_by_rev_type = self.filter_df_by_rev_routes(series_by_date, list_of_routes)
-            income_per_route_by_rev_type = df_by_rev_type.groupby('Route number').Price.sum()
+            df_by_rev_type = self.filter_df_by_rev_routes(
+                series_by_date, list_of_routes)
+            income_per_route_by_rev_type = df_by_rev_type.groupby(
+                'Route number').Price.sum()
         else:
-            income_per_route_by_rev_type = series_by_date.groupby('Route number').Price.sum()
+            income_per_route_by_rev_type = series_by_date.groupby(
+                'Route number').Price.sum()
         return income_per_route_by_rev_type
 
         # income_by_rev_type = df_by_rev_type.Price.sum()
         # return income_by_rev_type
-    
+
     def get_income_by_truck(self, rev_type: str, date: str = "dd/mm/yy"):
         pass
 
+
+# Temporary - try to build query for
+class WE_income_items:
+    def __init__(
+            self,
+            total: float,
+            gw: float,
+            cb: float,
+            cm: float,
+            sub: float,
+            uos: float,
+            fx : float = 0):
+        self.total = total
+        self.gw = gw
+        self.cb = cb
+        self.cm = cm
+        self.sub = sub
+        self.uos = uos
+        self.fx = fx
     

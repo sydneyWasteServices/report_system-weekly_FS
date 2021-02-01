@@ -16,15 +16,15 @@ class Rev_type(Enum):
 
 # WE stands for WasteEdge 
 # df : dataFrame
-class WE_transform:
+class WE_transform():
     def __init__(
         self,
-        df : object
+        df : object = {}
     ):
         self.df = df
 
 # Extracting the weekday from Route number, as it is like BR1-1
-    def extract_weekday(df : object):
+    def extract_weekday(self, df : object):
         
         def split_weekday(route_num : str):
             weekday = route_num.split('-')
@@ -43,7 +43,7 @@ class WE_transform:
     
         
 # Clean the Route number e.g. From BR1-1 to BR1
-    def clean_route_num_column(df : object):
+    def clean_route_num_column(self, df : object):
 
         def clean_route_number(route_num : str):
         # ==============================================================================
@@ -62,17 +62,17 @@ class WE_transform:
 
     # dataframe type with   DATE column 
     # transform date into date time index for resample 
-    def transform_date_format(df: object):
+    def transform_date_format(self, df: object):
         df['Date_idx'] = pd.to_datetime(df['Date'],format='%d/%m/%y')
         df = df.set_index(pd.DatetimeIndex(df['Date_idx']))
         return df
     
     # Sort by date Desc
-    def sort_by_date_desc(df):
+    def sort_by_date_desc(self, df):
         return df.sort_values(by=['Date'], inplace=True, ascending=False)
          
 
-    def drop_invalid_cols(df):
+    def drop_invalid_cols(self, df):
         # Sch Time End and PO are not that useful and many empty cell
         return df.drop(columns=['Schd Time Start','PO'])
         
