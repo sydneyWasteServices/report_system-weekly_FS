@@ -49,8 +49,12 @@ list_of_worksheet = ['total', 'general_waste', 'cardboard',
 # series[0]
 # df_date = series_keys["2021-01-13"]
 dates = rev(df).get_dates()
+# print(dates)
+
+# (['2020-12-23', '2020-12-30', '2021-01-06', '2021-01-13',              '2021-01-20']
+
 # must not be string dates[-1], since its a key for extracting dataset
-current_report_date = dates[-1]
+current_report_date = dates[3]
 
 # [x for x in lst if 'abc' in x]
 rev_types_inc = [rev(df).get_income_by_rev_type(
@@ -72,6 +76,14 @@ rt().add_sheets(wb, list_of_worksheet)
 current_report_date_title = "Date : " + str(current_report_date)
 rt().paul_weekly_fr1(wb, "weekly_fr", current_report_date_title, weii_obj)
 
+current_report_date
+
+wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_report_date)}.xlsx')
+
+wb.close()
+
+
+
 # df_date = "2021-01-20"
 # df_series = series.get_group(df_date)
 
@@ -79,4 +91,4 @@ rt().paul_weekly_fr1(wb, "weekly_fr", current_report_date_title, weii_obj)
 # [report_templates_horizontal(wb,rev_type,df_series,df_date) for rev_type in rev_types]
 
 
-# /D/'Run Analysis'/'WEEKLY SUMMARY from January 2021'/'January 2021/Weekly Summary'
+# /D/'Run Analysis'/WEEKLY_SUMMARY_from_January_2021/January_2021/Weekly_Summary

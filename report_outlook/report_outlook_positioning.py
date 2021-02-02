@@ -1,10 +1,9 @@
 import xlwings as xw
 import typing
 # from collections.abc import Sized, Iterable, Iterator
-
-
 # Type interface
 # List_route_num = list[str]
+
 
 class Report_outlook_positioning:
     def __init__(self):
@@ -84,13 +83,14 @@ class Report_outlook_positioning:
 
 
 # ===================================================================================
+
     def format_weekly_fr1_operating_income(
             self,
             wb: object,
             ws_name: str,
             rev_types: object = {},
             anchor_cell: str = "B4"):
-# Main Operating Income title
+        # Main Operating Income title
         operating_inc = wb.sheets[ws_name].range(
             anchor_cell).offset(row_offset=6)
         operating_inc.value = "Operating Income"
@@ -102,9 +102,10 @@ class Report_outlook_positioning:
 
         operating_inc_header = subtitle.offset(column_offset=6)
         operating_inc_header.value = ['Ton', 'Rate', 'Percentage']
-# Income Items Content 
+# Income Items Content
         # Should be refractor
         # switch object
+
         def switch_rev_type(key):
 
             switcher = {
@@ -152,49 +153,88 @@ class Report_outlook_positioning:
         cardboard_rebate = last_of_rev_types_cells.offset(row_offset=1)
         cardboard_rebate.value = "CardBoard Recycling Rebate"
 
-        cardboard_rebate_rate = cardboard_rebate.offset(column_offset=6) 
+        cardboard_rebate_rate = cardboard_rebate.offset(column_offset=6)
 
         total_rev = cardboard_rebate.offset(row_offset=2)
         total_rev.value = "Total Revenue"
+        total_rev.api.Font.Bold = True
 
 # ===================================================================================
         # Anchor Cell B4
         # add_rebate_figure = add_rebate.offset(column_offset=5)
         # cws - Contract Waste Services Exp
         # cgt - Contract Grease Trap Exp
-        def format_weekly_fr1_operating_expense(
-                self,
-                wb: object,
-                ws_name: str,
-                gw_tons: float = 0,
-                gw_rate: float = 0,
-                cm_tons: float = 0,
-                cm_rate: float = 0,
-                org_tons: float = 0,
-                org_rate: float = 0,
-                cws: float = 0,
-                cgt: float = 0,
-                others: float = 0,
-                anchor_cell: str = "B4"):
+    def format_weekly_fr1_operating_expense(
+            self,
+            wb: object,
+            ws_name: str,
+            gw_tons: float = 0,
+            gw_rate: float = 0,
+            cm_tons: float = 0,
+            cm_rate: float = 0,
+            org_tons: float = 0,
+            org_rate: float = 0,
+            cws: float = 0,
+            cgt: float = 0,
+            others: float = 0,
+            anchor_cell: str = "B4"):
 
-            operating_exp = wb.sheets[ws_name].range(anchor_cell).offset(row_offset=20)
-# Main Operating Expense title                    
-            operating_exp.value = "Operating Expense"
-            operating_exp.api.Font.Size = 13
-            operating_exp.api.Font.Bold = True
+        operating_exp = wb.sheets[ws_name].range(
+            anchor_cell).offset(row_offset=20)
+# Main Operating Expense title
+        operating_exp.value = "Operating Expense"
+        operating_exp.api.Font.Size = 13
+        operating_exp.api.Font.Bold = True
 # Sub title
-            subtitle = operating_exp.offset(row_offset=1)
-            subtitle.value = "Less:"
+        subtitle = operating_exp.offset(row_offset=1)
+        subtitle.value = "Less:"
 
-            operating_inc_header = subtitle.offset(column_offset=6)
-            operating_inc_header.value = ['Ton', 'Rate', 'Percentage']
+        operating_exp_header = subtitle.offset(column_offset=6)
+        operating_exp_header.value = ['Ton', 'Rate', 'Percentage']
 
-            # left 1 down 1 and check has value
-            op_exp_content_anchor_cell = operating_exp.offset(
-                row_offset=1, column_offset=1)
+
 # Exp Item Content
+        def switch_exp_items(key):
 
-            
+            switcher = {
+                'gw': 'Expense - General Waste',
+                'cm': "Expense - Comingled",
+                'org': "Expense - Organics",
+                'cws': "Contracting Waste Service",
+                'cgt': "Contracting Grease Trap",
+                'others': "Expense - Others"
+            }
+            exp_item = switcher.get(key, "invalid entry")
+            return exp_item
+
+        def inspect_fill_empty_cell(
+                target_cell: object,
+                exp_items_key,
+                exp_item_figure: float = 0):
+
+            if target_cell.value is None:
+                target_cell.value = switch_exp_items(exp_items_key)
+                target_cell.offset(column_offset=8).value = exp_item_figure
+                return target_cell
+
+            else:
+                
+                target_cell = target_cell.offset(row_offset=1)
+                return inspect_fill_empty_cell(target_cell, exp_items_key, exp_item_figure)
+
+        # Operating expense Items content 
+        exp_items_list = ['gw','cm','org' ,'cws','cgt','others']
+        # left 1 down 1 and check has value
+        op_exp_content_anchor_cell = subtitle.offset(
+            row_offset=1, column_offset=1)
+
+        exp_items_cell = [inspect_fill_empty_cell(op_exp_content_anchor_cell, exp_item) for exp_item in exp_items_list]
+        
+        last_of_exp_item = exp_items_cell[-1]
+        
+        total_exp = last_of_exp_item.offset(row_offset=2)
+        total_exp.value = "Total Expense"
+        total_exp.api.Font.Bold = True
 # =============================================================================
 
     def format_left_columns(self, wb, ws_name: str):

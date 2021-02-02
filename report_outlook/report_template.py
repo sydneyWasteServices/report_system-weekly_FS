@@ -64,7 +64,11 @@ class Report_template(Report_outlook_positioning):
 
         # Must be refractor as picking object key
         # point to the value
+        # operating expense 
         super().format_weekly_fr1_operating_expense(wb, ws_name)
+
+
+
          
 
 
