@@ -101,7 +101,8 @@ class Report_outlook_positioning:
         subtitle.value = "Add:"
 
         operating_inc_header = subtitle.offset(column_offset=6)
-        operating_inc_header.value = ['Ton', 'Rate', 'Percentage']
+        operating_inc_header.value = [
+            'Ton', 'Rate per Ton', '% of Percentage']
 # Income Items Content
         # Should be refractor
         # switch object
@@ -154,6 +155,7 @@ class Report_outlook_positioning:
         cardboard_rebate.value = "CardBoard Recycling Rebate"
 
         cardboard_rebate_rate = cardboard_rebate.offset(column_offset=6)
+        cardboard_rebate_rate.value = 100
 
         total_rev = cardboard_rebate.offset(row_offset=2)
         total_rev.value = "Total Revenue"
@@ -181,6 +183,7 @@ class Report_outlook_positioning:
 
         operating_exp = wb.sheets[ws_name].range(
             anchor_cell).offset(row_offset=20)
+
 # Main Operating Expense title
         operating_exp.value = "Operating Expense"
         operating_exp.api.Font.Size = 13
@@ -190,19 +193,19 @@ class Report_outlook_positioning:
         subtitle.value = "Less:"
 
         operating_exp_header = subtitle.offset(column_offset=6)
-        operating_exp_header.value = ['Ton', 'Rate', 'Percentage']
-
+        operating_exp_header.value = [
+            'Ton', 'Rate per Ton', '% of Percentage']
 
 # Exp Item Content
-        def switch_exp_items(key):
 
+        def switch_exp_items(key):
             switcher = {
-                'gw': 'Expense - General Waste',
-                'cm': "Expense - Comingled",
-                'org': "Expense - Organics",
-                'cws': "Contracting Waste Service",
-                'cgt': "Contracting Grease Trap",
-                'others': "Expense - Others"
+                'gw': ['Expense - General Waste', 275],
+                'cm': ["Expense - Comingled", 190],
+                'org': ["Expense - Organics", 240],
+                'cws': ["Contracting Waste Service", 0.03],
+                'cgt': ["Contracting Grease Trap", 0.0132],
+                'others': ["Expense - Others", 0.003]
             }
             exp_item = switcher.get(key, "invalid entry")
             return exp_item
@@ -213,28 +216,139 @@ class Report_outlook_positioning:
                 exp_item_figure: float = 0):
 
             if target_cell.value is None:
-                target_cell.value = switch_exp_items(exp_items_key)
-                target_cell.offset(column_offset=8).value = exp_item_figure
-                return target_cell
+
+                if exp_items_key == 'gw' or exp_items_key == 'cm' or exp_items_key == 'org':
+
+                    exp_item_attrs = switch_exp_items(exp_items_key)
+                    target_cell.value = exp_item_attrs[0]
+                    target_cell.offset(
+                        column_offset=6).value = exp_item_attrs[1]
+                    return target_cell
+
+                else:
+
+                    exp_item_attrs = switch_exp_items(exp_items_key)
+                    target_cell.value = exp_item_attrs[0]
+                    target_cell.offset(
+                        column_offset=7).value = exp_item_attrs[1]
+                    target_cell.offset(column_offset=8).value = exp_item_figure
+                    return target_cell
 
             else:
-                
                 target_cell = target_cell.offset(row_offset=1)
                 return inspect_fill_empty_cell(target_cell, exp_items_key, exp_item_figure)
 
-        # Operating expense Items content 
-        exp_items_list = ['gw','cm','org' ,'cws','cgt','others']
+        # Operating expense Items content
+        exp_items_list = ['gw', 'cm', 'org', 'cws', 'cgt', 'others']
         # left 1 down 1 and check has value
         op_exp_content_anchor_cell = subtitle.offset(
             row_offset=1, column_offset=1)
 
-        exp_items_cell = [inspect_fill_empty_cell(op_exp_content_anchor_cell, exp_item) for exp_item in exp_items_list]
-        
+        exp_items_cell = [inspect_fill_empty_cell(
+            op_exp_content_anchor_cell, exp_item) for exp_item in exp_items_list]
+
         last_of_exp_item = exp_items_cell[-1]
-        
+
         total_exp = last_of_exp_item.offset(row_offset=2)
         total_exp.value = "Total Expense"
         total_exp.api.Font.Bold = True
+# ========================================================================
+    def employment_exp(
+            self,
+            wb: object,
+            ws_name: str,
+            salary_exp: float = 0,
+            anchor_cell: str = "B4"):
+
+        employment_exp = wb.sheets[ws_name].range(
+            anchor_cell).offset(row_offset=32)
+
+# Main employment Expense title
+        employment_exp.value = "Employment Expense"
+        employment_exp.api.Font.Size = 13
+        employment_exp.api.Font.Bold = True
+# Sub title
+        subtitle = employment_exp.offset(row_offset=1)
+        subtitle.value = "Less:"
+# Exp Item Content
+        salary_exp = subtitle.offset(
+            row_offset=1, column_offset=1)
+        salary_exp.value = "Salary Expense"
+
+        salary_exp_pc = salary_exp.offset(column_offset=7)
+        salary_exp_pc.value = 0.303
+# ===============================================================
+    def mv_exp(
+            self,
+            wb: object,
+            ws_name: str,
+            mv_exp_items: object = {},
+            anchor_cell: str = "B4"):
+        
+        mv_expense = wb.sheets[ws_name].range(
+            anchor_cell).offset(row_offset=37)
+        
+# Main MV Expense title
+        mv_expense.value = "Motor Vehicle Expense"
+        mv_expense.api.Font.Size = 13
+        mv_expense.api.Font.Bold = True
+# Sub title
+        subtitle = mv_expense.offset(row_offset=1)
+        subtitle.value = "Less:"
+# MV Expense Item Content
+       
+
+        
+        def switch_mv_exp_items(key):
+            switcher = {
+                'mv-f': ['MV - Fuel', 0.03],
+                'mv-r': ["MV - Rego", 0.0046],
+                'mv-t': ["MV - Tolls", 0.0086],
+                'mv-i': ["MV - Insurance", 0.0122],
+                'rm-cc': ["Repair & Maintenance - Cab & Chassic", 0.0178],
+                'rm-cb': ["Repair & Maintenance - Compactor / Body", 0.013],
+                'rm-mc': ["Repair & Maintenance - Misc. Cosumables", 0.0006],
+                'rm-t': ["Repair & Maintenance - Tyres", 0.0039],
+                'wcl': ["Workshop Contractor Labour", 0.012],
+                'others': ["MV exp - Others", 0.0024],
+            }
+            exp_item = switcher.get(key, "invalid entry")
+            return exp_item
+
+        def inspect_fill_empty_cell(
+            target_cell: object,
+            exp_items_key,
+            exp_item_figure: float = 0):
+
+            if target_cell.value is None:
+
+                exp_item_attrs = switch_mv_exp_items(exp_items_key)
+                target_cell.value = exp_item_attrs[0]
+                target_cell.offset(
+                    column_offset=7).value = exp_item_attrs[1]
+
+                target_cell.offset(column_offset=8).value = exp_item_figure
+                return target_cell
+
+            else:
+                target_cell = target_cell.offset(row_offset=1)
+                return inspect_fill_empty_cell(target_cell, exp_items_key, exp_item_figure)
+
+        mv_exp_items_anchor_cell = subtitle.offset(
+            row_offset=1, column_offset=1)
+        
+
+    
+
+    def general_exp(self):
+        # General & Admin 2.18
+        # Business Promotion 1.1
+        # Occupancy Cost 2.43
+        pass
+
+    def purchase(self):
+        # Bins  1.32%
+        pass
 # =============================================================================
 
     def format_left_columns(self, wb, ws_name: str):

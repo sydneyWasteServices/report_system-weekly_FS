@@ -76,11 +76,9 @@ rt().add_sheets(wb, list_of_worksheet)
 current_report_date_title = "Date : " + str(current_report_date)
 rt().paul_weekly_fr1(wb, "weekly_fr", current_report_date_title, weii_obj)
 
-current_report_date
+# wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_report_date)}.xlsx')
 
-wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_report_date)}.xlsx')
-
-wb.close()
+# wb.close()
 
 
 

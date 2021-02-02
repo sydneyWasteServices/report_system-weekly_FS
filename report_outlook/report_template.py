@@ -67,6 +67,15 @@ class Report_template(Report_outlook_positioning):
         # operating expense 
         super().format_weekly_fr1_operating_expense(wb, ws_name)
 
+        # Total employment expense
+        super().employment_exp(wb, ws_name)
+
+        # MV expense
+        super().mv_exp(wb, ws_name)
+
+
+
+
 
 
          
