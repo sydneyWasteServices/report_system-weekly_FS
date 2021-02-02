@@ -43,19 +43,20 @@ class Revenue:
         rev_routes = switcher.get(rev_type, "invalid entry")
         return rev_routes
 
-    # Filter the Data frame by revenue routes
-    # rev_type => List of Route name => str
-    # df => dataframe obj
-    # Msut pass transformed dataframe
-    def get_dates(self):
-        series = self.df.resample('7D', kind='period')
-        series_date = series.Price.sum().keys()
-        return series_date
+    # Dates /or Resampled dataset keys
+    def get_dates_key(
+        self, 
+        resampled_dfs: object):
+        
 
-    def get_dataset(self, date: str = "dd/mm/yy"):
-        series = self.df.resample('7D', kind='period')
-        df = series.get_group(date)
-        return df
+    # resampled Dfs
+    def get_dataset(
+            self,
+            resampled_dfs: object,
+            date_key : str = "dd/mm/yy"):
+
+        resampled_dfs
+        
 
     def get_routes(self, rev_type: str):
         list_of_route_num = self.rev_type_hardcode(rev_type)
@@ -65,7 +66,8 @@ class Revenue:
         # list of route number
 
     def filter_df_by_rev_routes(self, df: object, list_of_routes):
-        df = df[df['Route number'].isin(list_of_routes)]
+        df = df.filter(items=list_of_routes)
+        # df = df[df['Route number'].isin(list_of_routes)]
         return df
 
     def get_trucks(self):
@@ -73,9 +75,9 @@ class Revenue:
 
         # category income
     def get_income_by_rev_type(
-        self, 
-        rev_type: str, 
-        date: str = "dd/mm/yy"):
+            self,
+            rev_type: str,
+            date: str = "dd/mm/yy"):
 
         series = self.df.resample('7D', kind='period')
         series_by_date = series.get_group(date)
@@ -129,7 +131,7 @@ class WE_income_items:
             cm: float,
             sub: float,
             uos: float,
-            fx : float = 0):
+            fx: float = 0):
         self.total = total
         self.gw = gw
         self.cb = cb
@@ -137,4 +139,3 @@ class WE_income_items:
         self.sub = sub
         self.uos = uos
         self.fx = fx
-    

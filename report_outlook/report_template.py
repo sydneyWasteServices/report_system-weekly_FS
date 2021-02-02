@@ -68,11 +68,6 @@ class Report_template(Report_outlook_positioning):
         super().format_weekly_fr1_operating_expense(wb, ws_name)
 
 
-
-         
-
-
-
     # Revenue Report template as Vectical
 
     def report_templates_vertical1(self, wb: object, rev_type_name: str, series: object, df_start_date: str):
@@ -80,7 +75,7 @@ class Report_template(Report_outlook_positioning):
         route_num = []
         route_incomes = []
 
-        print(rev_type_name)
+        
         if rev_type_name == 'total':
             total_income = series.Price.sum()
 

@@ -11,38 +11,28 @@ from report_outlook.report_template import Report_template as rt
 # Start with df, suppose it is querying from Wed
 # dataframe in new downloaded folder
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
+
 path = "../../dataVault/waste_edge_booking_data/23.12.2020_to_26.1.2021.csv"
 
-df = pd.read_csv(path)
-# df.drop(columns=['Schd Time Start','PO'])
+df = pd.read_csv(path, dtype={"Schd Time Start" : str, "PO" : str})
+
 # =================================================================================
 # ==============Transform the dataframe==========================
 
-# Make sure column Route Number
-df['Route number'] = df['Route number'].astype('str')
-# Clean Route number data from dash weekday  e.g. BR1-1
-# Extract the day number and assign it to a new column
+df = (wet()
+           .transform_and_clean_Route_num(df)
+           .transform_date_format(df))
 
-df = wet().extract_weekday(df)
-# Clean Route number column
-df = wet().clean_route_num_column(df)
-# Transform date to date index for resample purposes
-df = wet().transform_date_format(df)
-# Sort df by date Value desc
+weekly_dfs = df.resample('7D')
 
+# dates 
+weekly_dfs_key = list(weekly_dfs.groups.keys())
 
-# =================================================================================
-# Seperate Dataframe by 7 days
-series = df.resample('7D')
-# Weekly - create excel file per 7 Days
-series_keys = series.Price.sum().keys()
-
-# created name
-# create the condiitons for creating
 
 # ================================================================================
 rev_types = ['total', 'general_waste', 'cardboard',
              'comingled', 'subContractor', 'uos']
+
 list_of_worksheet = ['total', 'general_waste', 'cardboard',
                      'comingled', 'subContractor', 'uos', 'weekly_fr']
 # else:
@@ -76,11 +66,11 @@ rt().add_sheets(wb, list_of_worksheet)
 current_report_date_title = "Date : " + str(current_report_date)
 rt().paul_weekly_fr1(wb, "weekly_fr", current_report_date_title, weii_obj)
 
-current_report_date
 
-wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_report_date)}.xlsx')
 
-wb.close()
+# wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_report_date)}.xlsx')
+
+# wb.close()
 
 
 
