@@ -1,7 +1,8 @@
 # data Transform - waste Edge
 from data_transform.WE_transform import WE_transform as dt_wet
 from revenue.revenue import Revenue as rev
-from revenue.rev_types import Rev_types 
+from revenue.revenue_by_type import Revenue_by_type
+# from revenue.rev_types import Rev_types 
 # from report_outlook.report_outlook_positioning import Report_outlook_positioning as rop
 import pandas as pd
 import xlwings as xw
@@ -30,10 +31,11 @@ current_date = date_keys[0]
 
 
 print(current_date)
-current_ = rev().get_df_by(resampled_df,current_date)
+selected_df = rev().get_df_by(resampled_df,current_date)
 
-Revenue_by_type()
-
+list_rev_types = ['TOTAL', 'GENERAL_WASTE', 'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
+type_df = Revenue_by_type(selected_df)
+[print(f'{rev_type} is {type_df.total_inc(rev_type)}') for rev_type in list_rev_types]
 
 # # dates 
 # weekly_dfs_key = list(weekly_dfs.groups.keys())

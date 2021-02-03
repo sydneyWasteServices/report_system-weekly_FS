@@ -6,7 +6,7 @@ from revenue.rev_types import Rev_types
 class Revenue_by_type(Revenue):
     def __init__(self,
                  select_date_df: object):
-        super.__init__()
+        super().__init__()
         self.select_date_df = select_date_df
 
     def df(
@@ -27,6 +27,7 @@ class Revenue_by_type(Revenue):
                   .pipe(lambda data: data.filter(routes))
                   .pipe(lambda data : data.sum())
             )
+            return result 
 
     def routes_inc(
             self,
@@ -37,6 +38,7 @@ class Revenue_by_type(Revenue):
                   .pipe(lambda data: data.groupby('Route number').Price.sum())
                   .pipe(lambda data: data.filter(routes))
             )
+            return result 
             
 
         #  def rev_type_hardcode(self, rev_type: str):
