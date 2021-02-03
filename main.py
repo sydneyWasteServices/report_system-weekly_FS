@@ -11,9 +11,9 @@ from report_outlook.report_template import Report_template as rt
 # Start with df, suppose it is querying from Wed
 # dataframe in new downloaded folder
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
-path = "../../dataVault/waste_edge_booking_data/23.12.2020_to_26.1.2021.csv"
+path = "../../dataVault/waste_edge_booking_data/20.1.2021_26.1.2021.csv"
 
-df = pd.read_csv(path)
+df = pd.read_csv(path, dtype={"Schd Time Start": str, "PO": str})
 # df.drop(columns=['Schd Time Start','PO'])
 # =================================================================================
 # ==============Transform the dataframe==========================
@@ -49,12 +49,9 @@ list_of_worksheet = ['total', 'general_waste', 'cardboard',
 # series[0]
 # df_date = series_keys["2021-01-13"]
 dates = rev(df).get_dates()
-# print(dates)
-
-# (['2020-12-23', '2020-12-30', '2021-01-06', '2021-01-13',              '2021-01-20']
-
+print(dates)
 # must not be string dates[-1], since its a key for extracting dataset
-current_report_date = dates[3]
+current_report_date = dates[0]
 
 # [x for x in lst if 'abc' in x]
 rev_types_inc = [rev(df).get_income_by_rev_type(
@@ -76,9 +73,8 @@ rt().add_sheets(wb, list_of_worksheet)
 current_report_date_title = "Date : " + str(current_report_date)
 rt().paul_weekly_fr1(wb, "weekly_fr", current_report_date_title, weii_obj)
 
-# wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_report_date)}.xlsx')
-
-# wb.close()
+wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_report_date)}.xlsx')
+wb.close()
 
 
 

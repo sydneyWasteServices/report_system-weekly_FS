@@ -84,6 +84,7 @@ class Report_outlook_positioning:
 
 # ===================================================================================
 
+
     def format_weekly_fr1_operating_income(
             self,
             wb: object,
@@ -247,12 +248,14 @@ class Report_outlook_positioning:
         exp_items_cell = [inspect_fill_empty_cell(
             op_exp_content_anchor_cell, exp_item) for exp_item in exp_items_list]
 
+# Total Operating expense
         last_of_exp_item = exp_items_cell[-1]
 
         total_exp = last_of_exp_item.offset(row_offset=2)
         total_exp.value = "Total Expense"
         total_exp.api.Font.Bold = True
 # ========================================================================
+
     def employment_exp(
             self,
             wb: object,
@@ -278,16 +281,17 @@ class Report_outlook_positioning:
         salary_exp_pc = salary_exp.offset(column_offset=7)
         salary_exp_pc.value = 0.303
 # ===============================================================
+
     def mv_exp(
             self,
             wb: object,
             ws_name: str,
             mv_exp_items: object = {},
             anchor_cell: str = "B4"):
-        
+
         mv_expense = wb.sheets[ws_name].range(
             anchor_cell).offset(row_offset=37)
-        
+
 # Main MV Expense title
         mv_expense.value = "Motor Vehicle Expense"
         mv_expense.api.Font.Size = 13
@@ -296,9 +300,7 @@ class Report_outlook_positioning:
         subtitle = mv_expense.offset(row_offset=1)
         subtitle.value = "Less:"
 # MV Expense Item Content
-       
 
-        
         def switch_mv_exp_items(key):
             switcher = {
                 'mv-f': ['MV - Fuel', 0.03],
@@ -316,9 +318,9 @@ class Report_outlook_positioning:
             return exp_item
 
         def inspect_fill_empty_cell(
-            target_cell: object,
-            exp_items_key,
-            exp_item_figure: float = 0):
+                target_cell: object,
+                exp_items_key,
+                exp_item_figure: float = 0):
 
             if target_cell.value is None:
 
@@ -336,19 +338,113 @@ class Report_outlook_positioning:
 
         mv_exp_items_anchor_cell = subtitle.offset(
             row_offset=1, column_offset=1)
-        
+# MV expense Items
 
-    
+        mv_exp_items_list = ['mv-f', 'mv-r', 'mv-t', 'mv-i',
+                             'rm-cc', 'rm-cb', 'rm-mc', 'rm-t', 'wcl', 'others']
 
-    def general_exp(self):
-        # General & Admin 2.18
-        # Business Promotion 1.1
-        # Occupancy Cost 2.43
-        pass
+        mv_exp_items_cell = [inspect_fill_empty_cell(
+            mv_exp_items_anchor_cell, exp_item) for exp_item in mv_exp_items_list]
 
-    def purchase(self):
-        # Bins  1.32%
-        pass
+        # Total Operating expense
+        last_of_mv_exp_item = mv_exp_items_cell[-1]
+
+        total_exp = last_of_mv_exp_item.offset(row_offset=2)
+        total_exp.value = "Total Motor Vehicle Expense"
+        total_exp.api.Font.Bold = True
+# ==============================================================
+# General Expense Session
+
+    def general_exp(
+            self,
+            wb: object,
+            ws_name: str,
+            gen_exp_items: object = {},
+            anchor_cell: str = "B4"):
+
+        # General Expense Header
+        general_expense = wb.sheets[ws_name].range(
+            anchor_cell).offset(row_offset=53)
+
+        general_expense.value = "General Expense"
+        general_expense.api.Font.Size = 13
+        general_expense.api.Font.Bold = True
+# Subtitle
+        subtitle = general_expense.offset(row_offset=1)
+        subtitle.value = "Less:"
+
+        def switch_gen_exp_items(key):
+            switcher = {
+                'gen': ["General & Administration", 0.0218],
+                'bp': ["Business Promotion", 0.011],
+                'oc': ["Occupancy Cost", 0.0243]
+            }
+            exp_item = switcher.get(key, "invalid entry")
+            return exp_item
+
+        def inspect_fill_empty_cell(
+                target_cell: object,
+                exp_items_key,
+                exp_item_figure: float = 0):
+
+            if target_cell.value is None:
+
+                exp_item_attrs = switch_gen_exp_items(exp_items_key)
+                target_cell.value = exp_item_attrs[0]
+                target_cell.offset(
+                    column_offset=7).value = exp_item_attrs[1]
+
+                target_cell.offset(column_offset=8).value = exp_item_figure
+                return target_cell
+
+            else:
+                target_cell = target_cell.offset(row_offset=1)
+                return inspect_fill_empty_cell(target_cell, exp_items_key, exp_item_figure)
+
+# General Expense Items
+        gen_exp_items_anchor_cell = subtitle.offset(
+            row_offset=1, column_offset=1)
+
+        gen_exp_items_list = ['gen', 'bp', 'oc']
+
+        gen_exp_items_cell = [inspect_fill_empty_cell(
+            gen_exp_items_anchor_cell, exp_item) for exp_item in gen_exp_items_list]
+
+# Total Operating expense
+        last_of_gen_exp_item = gen_exp_items_cell[-1]
+
+        total_exp = last_of_gen_exp_item.offset(row_offset=2)
+        total_exp.value = "Total General Expense"
+        total_exp.api.Font.Bold = True
+
+
+# ==============================================================
+# Purchase Session
+
+    def purchase(
+            self,
+            wb: object,
+            ws_name: str,
+            purchase_items: object = {},
+            anchor_cell: str = "B4"):
+# Purchase Header
+        purchase_expense = wb.sheets[ws_name].range(
+            anchor_cell).offset(row_offset=61)
+
+        purchase_expense.value = "General Expense"
+        purchase_expense.api.Font.Size = 13
+        purchase_expense.api.Font.Bold = True
+# SubTitle
+        subtitle = purchase_expense.offset(row_offset=1)
+        subtitle.value = "Less:"
+# Purchase item
+        bin_exp = subtitle.offset(
+            row_offset=1, column_offset=1)
+        bin_exp.value = "Bins"
+
+        bin_exp_pc = bin_exp.offset(column_offset=7)
+        bin_exp_pc.value = 0.0132
+
 # =============================================================================
 
     def format_left_columns(self, wb, ws_name: str):

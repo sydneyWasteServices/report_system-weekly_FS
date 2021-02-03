@@ -73,6 +73,13 @@ class Report_template(Report_outlook_positioning):
         # MV expense
         super().mv_exp(wb, ws_name)
 
+        # General Expense
+        super().general_exp(wb, ws_name)
+
+        # Purchase Expense
+        super().purchase(wb, ws_name)
+
+
 
 
 
