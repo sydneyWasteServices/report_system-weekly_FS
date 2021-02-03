@@ -1,3 +1,86 @@
+
+
+    def get_trucks(self):
+        pass
+
+        # category income
+    def get_income_by_rev_type(
+            self,
+            rev_type: str,
+            date: str = "dd/mm/yy"):
+
+        series = self.df.resample('7D', kind='period')
+        series_by_date = series.get_group(date)
+
+        if rev_type != "total":
+
+            list_of_routes = self.get_routes(rev_type)
+
+            df_by_rev_type = self.filter_df_by_rev_routes(
+                series_by_date, list_of_routes)
+
+            income_by_rev_type = df_by_rev_type.Price.sum()
+
+        else:
+
+            income_by_rev_type = series_by_date.Price.sum()
+
+        return income_by_rev_type
+
+    # returns dict route : key, income_figure : value
+
+    def get_income_per_route_by_rev_type(self, rev_type: str, date: str = "dd/mm/yy"):
+        series = self.df.resample('7D', kind='period')
+        series_by_date = series.get_group(date)
+
+        if rev_type != "total":
+            list_of_routes = self.get_routes(rev_type)
+            df_by_rev_type = self.filter_df_by_rev_routes(
+                series_by_date, list_of_routes)
+            income_per_route_by_rev_type = df_by_rev_type.groupby(
+                'Route number').Price.sum()
+        else:
+            income_per_route_by_rev_type = series_by_date.groupby(
+                'Route number').Price.sum()
+        return income_per_route_by_rev_type
+
+        # income_by_rev_type = df_by_rev_type.Price.sum()
+        # return income_by_rev_type
+
+    def get_income_by_truck(self, rev_type: str, date: str = "dd/mm/yy"):
+        pass
+
+
+# Temporary - try to build query for
+class WE_income_items:
+    def __init__(
+            self,
+            total: float,
+            gw: float,
+            cb: float,
+            cm: float,
+            sub: float,
+            uos: float,
+            fx: float = 0):
+        self.total = total
+        self.gw = gw
+        self.cb = cb
+        self.cm = cm
+        self.sub = sub
+        self.uos = uos
+        self.fx = fx
+
+
+# df_date = "2021-01-20"
+# df_series = series.get_group(df_date)
+
+# rop.create_and_name_ws_by_routes(wb, rev_types)
+# [report_templates_horizontal(wb,rev_type,df_series,df_date) for rev_type in rev_types]
+
+
+# /D/'Run Analysis'/WEEKLY_SUMMARY_from_January_2021/January_2021/Weekly_Summary
+
+
 # [n for n, x in enumerate(lst) if 'abc' in x]
 # ================================================================================
     # Temporary Display
