@@ -16,6 +16,8 @@ from report_outlook.report_template import Report_template as rt
 
 path = "../../dataVault/waste_edge_booking_data/23.12.2020_to_26.1.2021.csv"
 
+list_rev_types = ['TOTAL', 'GENERAL_WASTE', 'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
+
 df = pd.read_csv(path, dtype={"Schd Time Start" : str, "PO" : str})
 
 # Transform
@@ -29,17 +31,23 @@ date_keys = rev().date_keys(resampled_df)
 
 current_date = date_keys[0]
 
+df_by_date = rev().get_df_by(resampled_df,current_date)
 
-print(current_date)
-selected_df = rev().get_df_by(resampled_df,current_date)
+by_rev_type = Revenue_by_type(df_by_date)
 
-list_rev_types = ['TOTAL', 'GENERAL_WASTE', 'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
-type_df = Revenue_by_type(selected_df)
-[print(f'{rev_type} is {type_df.total_inc(rev_type)}') for rev_type in list_rev_types]
+uos_route_inc = by_rev_type.routes_inc('UOS')
+
+
+
+# print(by_rev_type.df('UOS'))
+
+# [print(f'{rev_type} is {by_rev_type.routes_inc(rev_type)}') for rev_type in list_rev_types]
+
+
+
 
 # # dates 
 # weekly_dfs_key = list(weekly_dfs.groups.keys())
-
 
 # # ================================================================================
 # rev_types = ['total', 'general_waste', 'cardboard',
