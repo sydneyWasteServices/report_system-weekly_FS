@@ -9,41 +9,6 @@ class Report_outlook_positioning:
     def __init__(self):
         return
 
-    #  Create worksheets for the workbooks
-     # wb as xlwings workbook, list_of_route - List of str
-    def create_and_name_ws_by_routes(self, wb, list_of_rev_types):
-        num_rev_types = len(list_of_rev_types)
-        num_sheets = len(wb.sheets)
-
-        if num_rev_types > num_sheets:
-            add_num_sheets = num_rev_types - num_sheets
-            for n in range(add_num_sheets):
-                wb.sheets.add()
-
-        for (i, rev_type) in enumerate(list_of_rev_types):
-            wb.sheets[i].name = rev_type
-
-    # Format sheets font style
-    # How type object, wb as xlwings workbook
-
-    def format_ws_font_style_to_arial(self, wb, ws_name: str):
-        ws = wb.sheets[ws_name]
-        ws.range("A:DA").api.Font.Name = "Arial"
-
-    # Format Report Headers
-    # date index / date string or date object
-    def format_headers(self, wb, ws_name: str, date="dd/mm/yyyy"):
-        report_title = wb.sheets[ws_name].range('A1')
-        report_date = wb.sheets[ws_name].range('A2')
-
-        report_title.value = f"Weekly Financial Management Report - {ws_name}"
-        report_date.value = f"Start at : {date}"
-
-        report_title.api.Font.Size = 13
-        report_date.api.Font.Size = 13
-        report_title.api.Font.Bold = True
-        report_date.api.Font.Bold = True
-
     def format_weekly_fr1_header(self, wb: object, ws_name: str, start_date: str = "dd/mm/yyyy"):
         report_title = wb.sheets[ws_name].range('A1')
         report_start_date = wb.sheets[ws_name].range('A2')
@@ -107,6 +72,7 @@ class Report_outlook_positioning:
         # switch object
 
         def switch_rev_type(key):
+            # Revenue type 
 
             switcher = {
                 'total': 'Revenue - Total',
@@ -237,11 +203,6 @@ class Report_outlook_positioning:
         total_exp.api.Font.Bold = True
 # =============================================================================
 
-    def format_left_columns(self, wb, ws_name: str):
-        ws = wb.sheets[ws_name]
-        ws.range('A1').column_width = 1.0
-        ws.range('B1').column_width = 3.14
-        ws.range('C1').column_width = 3.14
 
     def format_report_content_total_income(self, wb, ws_name: str, total_revenue: float = 0.00):
         ws = wb.sheets[ws_name]
