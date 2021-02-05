@@ -128,10 +128,57 @@ class Basic_component:
         for i in range(start_cell_col, end_cell_col+1):
             ws.range((start_cell_row, i)).api.Font.Bold = True
 
-    def fill_items(
+    def fill_items_downward(
             self,
             wb: object,
             ws_name: str,
             items: object = {},
-            cell_loc: str =""):
-        pass
+            cell_loc: str = ""):
+
+            item_start_cell = wb.sheets[ws_name].range(cell_loc)
+
+            item_keys = items.keys()
+            #           Infor                   Column Offset by
+            #            title          Figure  offset by 0 , 6
+            # {"gw": [["General Waste", 9999],[0, 6]] }
+        
+            for key in item_keys:
+
+                item_info = items[key][0]
+                item_col_offset = items[key][1]
+
+                if len(item_info) != len(item_col_offset):
+                    print("info does not match offset coordinates")
+                else:
+                    for i, info in enumerate(item_info):
+                        item_info[]
+
+
+
+        
+
+        # e.g Value as Array [infor1, infor2] , leftward of [1columns, 3 columns ]
+    def fill_key_val(
+            self,
+            wb: object,
+            ws_name: str,
+            key : str,
+            vals : list,
+            leftward : list,
+            cell_loc: object):
+
+            cell_loc.value = key
+
+            for i, val in enumerate(vals):
+               cell_loc.offset(column_offset=leftward[i]).value = val
+
+
+    def check_empty_cell(self, target_cell: object):
+
+        if target_cell.value is None:
+            return target_cell
+        else:
+            new_target_cell = target_cell.offset(row_offset=1)
+            return check_empty_cell(new_target_cell)
+
+        # new_cell_loc = cell_loc.end("down").column + 1
