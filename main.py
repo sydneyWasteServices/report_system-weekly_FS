@@ -11,7 +11,8 @@ from report_outlook.report_template import Report_template as rt
 # Start with df, suppose it is querying from Wed
 # dataframe in new downloaded folder
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
-path = "../../dataVault/waste_edge_booking_data/20.1.2021_26.1.2021.csv"
+
+path = "../../dataVault/booking/03.02.2021_09.02.2021.csv"
 
 df = pd.read_csv(path, dtype={"Schd Time Start": str, "PO": str})
 # df.drop(columns=['Schd Time Start','PO'])
@@ -73,7 +74,9 @@ rt().add_sheets(wb, list_of_worksheet)
 current_report_date_title = "Date : " + str(current_report_date)
 rt().paul_weekly_fr1(wb, "weekly_fr", current_report_date_title, weii_obj)
 
-wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_report_date)}.xlsx')
+# wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_report_date)}.xlsx')
+
+wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\{str(current_report_date)}.xlsx')
 wb.close()
 
 
