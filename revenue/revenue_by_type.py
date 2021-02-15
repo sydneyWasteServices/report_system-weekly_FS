@@ -20,14 +20,18 @@ class Revenue_by_type(Revenue):
     def total_inc(
             self,
             rev_type: str):
-
-            routes = Rev_types[rev_type].value
-            result = (self.select_date_df
-                  .pipe(lambda data: data.groupby('Route number').Price.sum())
-                  .pipe(lambda data: data.filter(routes))
-                  .pipe(lambda data : data.sum())
-            )
-            return result 
+            
+            if Rev_types[rev_type].value == "total":
+                  result = self.select_date_df.Price.sum()
+                  return result
+            else:
+                  routes = Rev_types[rev_type].value
+                  result = (self.select_date_df
+                        .pipe(lambda data: data.groupby('Route number').Price.sum())
+                        .pipe(lambda data: data.filter(routes))
+                        .pipe(lambda data : data.sum())
+                  )
+                  return result 
 
     def routes_inc(
             self,

@@ -1,4 +1,5 @@
 import xlwings as xw
+from report_outlook.component.style import Style
 
 
 class Basic_component:
@@ -35,11 +36,11 @@ class Basic_component:
             self,
             wb: object,
             ws_name: str,
-            title: str = "Weekly Financial Report Summary",
+            report_title: str = "Weekly Financial Report Summary",
             cell_loc: str = "A1"):
 
         title_cell = wb.sheets[ws_name].range(cell_loc)
-        title_cell.value = f"{title} - {ws_name}"
+        title_cell.value = f"{report_title} - {ws_name}"
         title_cell.api.Font.Size = 13
         title_cell.api.Font.Bold = True
 
@@ -48,11 +49,11 @@ class Basic_component:
             wb: object,
             ws_name: str,
             date: str,
-            date_descr: str = "Start at :",
+            date_descr: str = "Start at",
             cell_loc: str = "A2"):
 
         date_cell = wb.sheets[ws_name].range(cell_loc)
-        datdate_cell.value = f"{date_descr} : {date}"
+        date_cell.value = f"{date_descr} : {date}"
 
         date_cell.api.Font.Size = 13
         date_cell.api.Font.Bold = True
@@ -108,7 +109,7 @@ class Basic_component:
 
         start_cell = wb.sheets[ws_name].range(cell_loc)
         start_cell.value = table_headers
-        self.table_headers_format(cell_loc)
+        self.table_headers_format(wb, ws_name, cell_loc)
 
     def table_headers_format(
             self,
@@ -134,51 +135,89 @@ class Basic_component:
             ws_name: str,
             items: object = {},
             cell_loc: str = ""):
-
-            item_start_cell = wb.sheets[ws_name].range(cell_loc)
-
-            item_keys = items.keys()
-            #           Infor                   Column Offset by
-            #            title          Figure  offset by 0 , 6
-            # {"gw": [["General Waste", 9999],[0, 6]] }
         
-            for key in item_keys:
-
-                item_info = items[key][0]
-                item_col_offset = items[key][1]
-
-                if len(item_info) != len(item_col_offset):
-                    print("info does not match offset coordinates")
-                else:
-                    for i, info in enumerate(item_info):
-                        item_info[]
+        if items.__dict__ == {}:
+            print(f"{ws_name} items is empty")
+            return 0
+        else:
+            item_dict = items.__dict__
 
 
+        if cell_loc == "":
+            print(f"inc / exp items start cell is {cell_loc}")
+            return 0
 
+        cells = []
+        item_start_cell = wb.sheets[ws_name].range(cell_loc)
+
+        item_keys = item_dict.keys()
+
+
+        #           Infor                   Column Offset by
+        #            title          Figure  offset by 0 , 6
+        # {"gw": [["General Waste", 9999],[0, 6]] }
+
+        for item in item_keys:
+
+            item_info = item_dict[item][0]
+            item_col_offset = item_dict[item][1]
+
+            if len(item_info) != len(item_col_offset):
+                print("info does not match offset coordinates")
+                return 0
+            else:
+                
+                target_cell = self.check_empty_cell(item_start_cell)
+
+                for i, itemName in enumerate(item_info):
+                    
+                    cells.append(target_cell)
+
+                    self.fill_item_sideward(
+                        wb,
+                        ws_name, 
+                        itemName,
+                        item_col_offset[i],
+                        target_cell)
         
+        return cells
 
-        # e.g Value as Array [infor1, infor2] , leftward of [1columns, 3 columns ]
-    def fill_key_val(
+# {itemName : [[infor1, infor2], [1columns, 3 columns]]}
+# e.g Value as Array [infor1, infor2] , leftward of [1columns, 3 columns ]
+# Item1          9999
+    def fill_item_sideward(
             self,
             wb: object,
             ws_name: str,
-            key : str,
-            vals : list,
-            leftward : list,
+            itemName: str,
+            offsetBy: int,
             cell_loc: object):
 
-            cell_loc.value = key
+        cell_loc.offset(column_offset=offsetBy).value = itemName
 
-            for i, val in enumerate(vals):
-               cell_loc.offset(column_offset=leftward[i]).value = val
-
-
+# ==============
     def check_empty_cell(self, target_cell: object):
 
         if target_cell.value is None:
             return target_cell
         else:
             new_target_cell = target_cell.offset(row_offset=1)
-            return check_empty_cell(new_target_cell)
+            return self.check_empty_cell(new_target_cell)
 
         # new_cell_loc = cell_loc.end("down").column + 1
+# ==============
+
+    def session_total(
+            self,
+            itemName: str,
+            figure: float = 0,
+            cell_loc: object = {}):
+
+        session_total_name = f"Total {itemName}"
+
+        session_total_title = cell_loc.offset(row_offset=2)
+        session_total_title.value = session_total_name
+        session_total_title.api.Font.Bold = True
+
+        session_total = session_total_title.offset(column_offset=8)
+        session_total.value = figure
