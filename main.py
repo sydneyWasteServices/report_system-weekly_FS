@@ -23,7 +23,7 @@ import time
 # dataframe in new downloaded folder
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
 
-path = "../../dataVault/booking/23.12.2020_to_26.1.2021.csv"
+path = "../../dataVault/booking/10.2.2021_16.2.2021.csv"
 
 list_rev_types = ['TOTAL', 'GENERAL_WASTE',
                   'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
@@ -109,5 +109,5 @@ for rev_type_name in list_rev_types:
 #     .by_rev_type())
 
 
-# # wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_report_date)}.xlsx')
-# # wb.close()
+wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_date)}.xlsx')
+wb.close()
