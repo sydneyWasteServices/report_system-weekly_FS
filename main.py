@@ -12,7 +12,7 @@ from report_outlook.report_template import Report_template as rt
 # dataframe in new downloaded folder
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
 
-path = "../../dataVault/booking/03.02.2021_09.02.2021.csv"
+path = "../../dataVault/booking/10.02.2021_16.02.2021.csv"
 
 df = pd.read_csv(path, dtype={"Schd Time Start": str, "PO": str})
 # df.drop(columns=['Schd Time Start','PO'])
