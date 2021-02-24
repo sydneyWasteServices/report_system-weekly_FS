@@ -23,7 +23,9 @@ import time
 # dataframe in new downloaded folder
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
 
-path = "../../dataVault/booking/10.2.2021_16.2.2021.csv"
+# $ /c/Users/gordon/Desktop/
+
+path = "../../ubuntuShareDrive/Datasets/booking/17.2.2021_24.2.2021.csv"
 
 list_rev_types = ['TOTAL', 'GENERAL_WASTE',
                   'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
@@ -42,7 +44,7 @@ resampled_df = rev().resample_by_7d(trans_df)
 
 date_keys = rev().date_keys(resampled_df)
 
-current_date = date_keys[0]
+current_date = date_keys[0].date()
 
 df_by_date = rev().get_df_by(resampled_df, current_date)
 
