@@ -139,3 +139,5 @@ class Report_template(Complex_component):
             ws_name,
             date,
             "Weekly Financial Report Summary")
+
+        

@@ -1,7 +1,56 @@
+Testing code
+
+
+# print('__file__={0:<35} | __name__={1:<20} | __package__={2:<20}'.format(__file__,__name__,str(__package__)))
+
+
+# C:\\Users\\gordon\\Desktop\\codeVault\\report_system\\
+# sys.path.append(os.path.join(os.path.dirname(__file__), '..\\..\\', 'revenue'))
+# import Revenue as rev
+# sys.path.append(os.path.join(os.path.dirname(__file__), 'C:\\Users\\gordon\\Desktop\\codeVault\\report_system\\revenue', 'revenue_by_type.py'))
+# print(os.path)
+
+# from revenue_by_type import Revenue_by_type
+# revenue.
+# from .. import Revenue
+# # revenue_by_type  Revenue
+# # Revenue_by_type  
+
+# import pandas as pd 
+# import numpy as np
+
+
+
+ 
+
+# df = Revenue.()
+# from report_system.revenue.revenue import Revenue
+
+# Y:/new_project>python -m project.package.demo
+
+#  __file__=Y:/new_project/project/package/demo.py | __name__=__main__                  | __package__=project.package
+#  __file__=Y:/new_project/project/config.py       | __name__=project.config            | __package__=project
+#  The value of config.count is 5
+
+
+# #  project
+# #  ├── config.py
+# #  └── package
+# #      ├── __init__.py
+# #      └── demo.py
+
+# /main/
+# /main/common/foo.py
+# /main/A/
+# /main/A/src/
+# /main/A/src/bar.py
+
+# use Python's relative imports to import foo from bar?
+
+# bar directory
+
+
 Main
-
-    
-
 
 # [print(f'{rev_type} is {by_rev_type.routes_inc(rev_type)}') for rev_type in list_rev_types]
 

@@ -17,7 +17,6 @@ import xlwings as xw
 import pandas as pd
 import time
 
-
 # Fixed as Weds to Tues
 # Start with df, suppose it is querying from Wed
 # dataframe in new downloaded folder
@@ -92,24 +91,37 @@ weekly_report = rt()
         )
 )
 
+
 for rev_type_name in list_rev_types:
 
     # Also use if to catch Total => list out all route income
     route_inc = rev_type.routes_inc(rev_type_name)
+
+    # strategy => Extract information from Df tunck it to object Info
+    # Report template parse info object Position Figure in report
+    # Build Info Object ?
+    # Total Operating Income by Type 
+    # Total Rebate / Total Operating Expense  
+    # List of Routes Number
+    # List of Routes Operating Income
+    # List of Routes Operating Expense / Income => if Cardboard Inc, other than that expense
+    # List of Truck Number
+    # List of Drivers Salary
+
+
     (weekly_report
         .by_rev_type(
             wb,
             rev_type_name,
             current_date,
-            route_inc))
+            routes_info_obj))
   
 
 
 # rev_routes_inc = [rev_type.routes_inc(rev_type_name) for rev_type_name in list_rev_types]
-
 # (weekly_report
 #     .by_rev_type())
 
 
-wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\January_2021\\Weekly_Summary\\{str(current_date)}.xlsx')
+wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\{str(current_date)}.xlsx')
 wb.close()

@@ -12,8 +12,10 @@ class Revenue_by_type(Revenue):
     def df(
             self,
             rev_type: str):
-
+      
+      # routes => return list of routes 
         routes = Rev_types[rev_type].value
+      #   isin list of routes
         routes_row = self.select_date_df['Route number'].isin(routes)
         return self.select_date_df[routes_row]
 
@@ -33,7 +35,7 @@ class Revenue_by_type(Revenue):
                   )
                   return result 
 
-    def routes_inc(
+    def routes_inc_series(
             self,
             rev_type: str):
 
@@ -55,4 +57,4 @@ class Revenue_by_type(Revenue):
                   .pipe(lambda data: data.filter(routes))
                   .pipe(lambda data: data.index)
             )
-            return list(result) 
+            return list(result)
