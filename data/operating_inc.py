@@ -23,4 +23,5 @@ class Operating_inc:
             self.fr = [["Fixed Revenue", fr], [0,8]]
             self.cb_rr = [["CardBoard Recycling Rebate", cb_rr], [0,6]]
         
-        
+    def get_rate(self, rev_type : str):
+        return self.cb

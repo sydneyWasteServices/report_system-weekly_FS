@@ -30,6 +30,7 @@ class WE_transform():
 
         df['Date_idx'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
         df['Date'] = pd.DatetimeIndex(df['Date'])
+        
         return df.set_index(df['Date'], inplace=False)
 
     # Sort by date Desc

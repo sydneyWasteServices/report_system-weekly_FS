@@ -12,8 +12,8 @@ class Revenue_by_type(Revenue):
     def df(
             self,
             rev_type: str):
-      
-      # routes => return list of routes 
+
+      # routes => return list of routes
         routes = Rev_types[rev_type].value
       #   isin list of routes
         routes_row = self.select_date_df['Route number'].isin(routes)
@@ -22,39 +22,59 @@ class Revenue_by_type(Revenue):
     def total_inc(
             self,
             rev_type: str):
-            
-            if Rev_types[rev_type].value == "total":
-                  result = self.select_date_df.Price.sum()
-                  return result
-            else:
-                  routes = Rev_types[rev_type].value
-                  result = (self.select_date_df
-                        .pipe(lambda data: data.groupby('Route number').Price.sum())
-                        .pipe(lambda data: data.filter(routes))
-                        .pipe(lambda data : data.sum())
-                  )
-                  return result 
+
+        if Rev_types[rev_type].value == "total":
+            result = self.select_date_df.Price.sum()
+            return result
+        else:
+            routes = Rev_types[rev_type].value
+            result = (self.select_date_df
+                      .pipe(lambda data: data.groupby('Route number').Price.sum())
+                      .pipe(lambda data: data.filter(routes))
+                      .pipe(lambda data: data.sum())
+                      )
+            return result
 
     def routes_inc_series(
             self,
             rev_type: str):
+        # Catch Total
+        # if Total
 
-            routes = Rev_types[rev_type].value
-            result = (self.select_date_df
+        routes = Rev_types[rev_type].value
+        result = (self.select_date_df
                   .pipe(lambda data: data.groupby('Route number').Price.sum())
                   .pipe(lambda data: data.filter(routes))
-            )
-            return result 
-    
+                  )
+        return result
+
+
     def routes_name(
             self,
             rev_type: str):
 
-            routes = Rev_types[rev_type].value
+        # Catch Total
+        # if Total
+        routes = Rev_types[rev_type].value
 
-            result = (self.select_date_df
+        result = (self.select_date_df
                   .pipe(lambda data: data.groupby('Route number').Price.sum())
                   .pipe(lambda data: data.filter(routes))
                   .pipe(lambda data: data.index)
-            )
-            return list(result)
+                  )
+        return list(result)
+
+    def routes_inc(
+        self,
+        rev_type: str):
+
+        # Catch Total
+        # if Total
+
+        routes = Rev_types[rev_type].value
+        result = (self.select_date_df
+                  .pipe(lambda data: data.groupby('Route number').Price.sum())
+                  .pipe(lambda data: data.filter(routes))
+        )
+        return list(result)
+

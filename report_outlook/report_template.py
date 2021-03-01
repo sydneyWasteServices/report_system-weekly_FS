@@ -120,10 +120,10 @@ class Report_template(Complex_component):
             return 0
 
         pass
-
+# ===================================================================================
     def by_rev_type(self,
                     wb: object,
-                    ws_name: list,
+                    ws_name: str,
                     date: str,
                     route_op_inc: object = {}):
 
@@ -140,4 +140,8 @@ class Report_template(Complex_component):
             date,
             "Weekly Financial Report Summary")
 
-        
+        # route_op_inc
+        # {
+        # routesName : [1,2,3,4,5]
+        # routesInc : [M1, M2, M3, M4]
+        # }
