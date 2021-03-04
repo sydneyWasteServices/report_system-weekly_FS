@@ -26,7 +26,7 @@ class Routing_tipping:
         df = df.dropna(subset=['Docket No'])
         return df
 
-    def total_weight_rebateOrExp(self, rev_type: str, rate : float):
+    def total_weight_expOrRebate(self, rev_type: str, rate : float):
         routes = Rev_types[rev_type].value
 
         result = (self.tipping_df
@@ -36,6 +36,22 @@ class Routing_tipping:
                   .pipe(lambda data: data.sum())
                   )
         result.index = ["weight", "expOrRebate" ]
+        return result
+
+
+    def routes_weight_expOrRebate(self, rev_type: str, rate : float):
+        
+        routes = Rev_types[rev_type].value
+        
+        result = (self.tipping_df
+                  .pipe(lambda data: data.groupby('Route No').Weight.sum())
+                  .pipe(lambda data: data.filter(routes))
+                  .pipe(lambda data: data.transform([lambda x : x,lambda x : x * rate]))
+                  .pipe(lambda data: data.rename(columns={data.columns[0] : 'weight_expOrRebate'}))
+                  )
+        # return routes -key : route Number, value : Array of [weight, weight * rate]
+                                    #          [0,1]
+        # Return data frame   key : value [weight, Rebate/Exp]
         return result
 
 
@@ -61,18 +77,51 @@ class Routing_tipping:
             return diff_elem
     
 
-    def routes_weight_expOrRebate(self, rev_type: str, rate : float):
-        
-        routes = Rev_types[rev_type].value
-        
-        result = (self.tipping_df
-                  .pipe(lambda data: data.groupby('Route No').Weight.sum())
-                  .pipe(lambda data: data.filter(routes))
-                  .pipe(lambda data: data.transform([lambda x : x,lambda x : x * rate]))
-                  .pipe(lambda data: data.rename(columns={data.columns[0] : 'weight_expOrRebate'}))
-                  )
-        # return routes -key : route Number, value : Array of [weight, weight * rate]
-        # Return data frame   key : value [weight, Rebate/Exp]
-        return result
+    def route_weight_series(self, rev_type: str):
 
+        routes = Rev_types[rev_type].value
+                
+        if routes == "total":
+            routes_series = self.tipping_df.groupby('Route No').Weight.sum()
+            return routes_series
+        else:
+            routes_series = (self.tipping_df
+                                .pipe(lambda data : data.groupby('Route No').Weight.sum())
+                                .pipe(lambda data : data.filter(routes))
+            )
+            return routes_series
+
+
+
+
+    def routes_total_weight(self, rev_type :str):
+        routes = Rev_types[rev_type].value
+
+        if routes == "total":
+            series = self.tipping_df.groupby('Route No').Weight.sum()
+            total_weight = series.sum()
+            return total_weight
+        else:
+            total_weight = (self.tipping_df
+                                .pipe(lambda data : data.groupby('Route No').Weight.sum())
+                                .pipe(lambda data : data.filter(routes).sum())
+            )
+            return total_weight
+
+
+
+    # def routes_total            
+
+
+    # if Rev_types[rev_type].value == "total":
+    #         result = self.select_date_df.Price.sum()
+    #         return result
+    #     else:
+    #         routes = Rev_types[rev_type].value
+    #         result = (self.select_date_df
+    #                   .pipe(lambda data: data.groupby('Route number').Price.sum())
+    #                   .pipe(lambda data: data.filter(routes))
+    #                   .pipe(lambda data: data.sum())
+    #                   )
+    #         return result
 

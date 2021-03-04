@@ -25,7 +25,7 @@ class Revenue:
 
     # return key : route, value : figure
 
-    def filter_df_by_rev_routes(self, df: object, list_of_routes):
+    def filter_df_by_rev_routes(self, df: object, list_of_routes : list):
         df = df.filter(items=list_of_routes)
         # df = df[df['Route number'].isin(list_of_routes)]
         return df

@@ -8,19 +8,33 @@ from routes_tipping.routes_tipping import Routing_tipping
 from revenue.revenue import Revenue as rev
 from data_transform.WE_transform import WE_transform as dt_wet
 from revenue.revenue_by_type import Revenue_by_type
+from data.rate import Rate
 import pandas as pd
 
+rateObj = Rate(1,2,3,4)
+
+# , 'ORGANICS'
+tiplist = ['GENERAL_WASTE', 'CARDBOARD', 'COMINGLED']
 
 path = '../../../ubuntuShareDrive/Datasets/tipping_data/TipRecords_17.02.2021_23.02.2021.csv'
 df = pd.read_csv(path)
 
-a = Routing_tipping()
-df = a.drop_no_docket(df)
-route_tip_df = a.transform(df)
+df['Route No'] = df['Route No'].astype('str')
+df[['Route No', 'weekday']] = df['Route No'].str.split('-', 1, expand=True)
 
-route_tip = Routing_tipping(route_tip_df).routes_weight('CARDBOARD')
+routes_tip_df = Routing_tipping(df)
 
-diff = Routing_tipping(route_tip_df).routes_diff('CARDBOARD')
+series_a = [routes_tip_df.route_weight_series(tip) for tip in tiplist]
+
+print(series_a[1].index)
+
+# a = Routing_tipping()
+# df = a.drop_no_docket(df)
+# route_tip_df = a.transform(df)
+
+# route_tip = Routing_tipping(route_tip_df).routes_weight('CARDBOARD')
+
+# diff = Routing_tipping(route_tip_df).routes_diff('CARDBOARD')
 
 # print(route_tip)
 

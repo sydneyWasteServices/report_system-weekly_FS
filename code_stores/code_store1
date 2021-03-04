@@ -1,3 +1,53 @@
+Test for routes info
+
+
+    # Also use if to catch Total => list out all route income
+    total_inc = booking_df.total_inc(rev_type_name)
+    routes_inc = booking_df.routes_inc(rev_type_name)
+    routes_inc_series = booking_df.routes_inc_series(rev_type_name)
+    routes_name = booking_df.routes_name(rev_type_name)
+
+    # Tipping Dataframe
+    # RETURN dataframe => dataframe['weight'] or  dataframe['expOrRebate']
+    total_weight_expOrRebate = route_tipping(
+        tipping_df).total_weight_rebateOrExp(rev_type_name, )
+    # RETURN dataframe Key : routes number, values : [routes' weight, routes' expense or rebate
+    routes_weight_expOrRebate = route_tipping(
+        tipping_df).routes_weight_expOrRebate(rev_type_name, )
+
+    # list_rev_types = ['TOTAL', 'GENERAL_WASTE',
+    #               'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
+    # if condition for Total
+
+    # routes_info_data = (Routes_info(
+    #     rev_type_name,
+    #     total_routes_inc,
+
+    # ))
+
+
+# After having list of  routes info object
+
+# Weekly report Total Sheet
+# Weekly report Rev type sheet
+
+# (weekly_report
+#         .by_rev_type(
+#             wb,
+#             rev_type_name,
+#             current_date,
+#             routes_info_obj)
+#     )
+
+# rev_routes_inc = [rev_type.routes_inc(rev_type_name) for rev_type_name in list_rev_types]
+# (weekly_report
+#     .by_rev_type())
+
+
+
+
+
+
 Testing code
 
 

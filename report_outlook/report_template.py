@@ -31,6 +31,7 @@ class Report_template(Complex_component):
     # Table Headers
 
         op_tb_header = ["Ton", "Rate per Ton", "% of Total Operating Inc"]
+        
         no_tb_header = []
 
         super().report_formating(
@@ -59,7 +60,7 @@ class Report_template(Complex_component):
                 wb,
                 ws_name,
                 "Operating Expense",
-                True,
+                False,
                 op_tb_header,
                 op_exp,
                 24)
@@ -72,7 +73,7 @@ class Report_template(Complex_component):
                 wb,
                 ws_name,
                 "Operating Salary",
-                True,
+                False,
                 no_tb_header,
                 op_salary,
                 36)
@@ -85,7 +86,7 @@ class Report_template(Complex_component):
                 wb,
                 ws_name,
                 "Motor Vehicle Expense",
-                True,
+                False,
                 no_tb_header,
                 mv_exp,
                 43)
@@ -98,7 +99,7 @@ class Report_template(Complex_component):
                 wb,
                 ws_name,
                 "General & Administration",
-                True,
+                False,
                 no_tb_header,
                 admin_exp,
                 59)
@@ -111,12 +112,12 @@ class Report_template(Complex_component):
                 wb,
                 ws_name,
                 "Bins Purchase",
-                True,
+                False,
                 no_tb_header,
                 bins_exp,
-                24)
+                68)
         else:
-            print("Admin expense items is empty")
+            print("Bins expense items is empty")
             return 0
 
         pass
@@ -125,10 +126,7 @@ class Report_template(Complex_component):
                     wb: object,
                     ws_name: str,
                     date: str,
-                    route_op_inc: object = {}):
-
-        print(route_op_inc.keys())
-        # print(route_op_inc.values())
+                    routes_info : object):
 
         super().report_formating(
             wb,
@@ -139,6 +137,8 @@ class Report_template(Complex_component):
             ws_name,
             date,
             "Weekly Financial Report Summary")
+
+        print(f"I am running at {routes_info.rev_type} {routes_info.total_weight}")
 
         # route_op_inc
         # {

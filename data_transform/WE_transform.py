@@ -29,10 +29,10 @@ class WE_transform():
             df: object):
 
         df['Date_idx'] = pd.to_datetime(df['Date'], format='%d/%m/%y')
-        df['Date'] = pd.DatetimeIndex(df['Date'])
+        # df['Date'] = pd.DatetimeIndex(df['Date'])
         
-        return df.set_index(df['Date'], inplace=False)
-
+        return df.set_index(df['Date_idx'], inplace=False)
+    
     # Sort by date Desc
 
     # def sort_by_date_desc(self, df):

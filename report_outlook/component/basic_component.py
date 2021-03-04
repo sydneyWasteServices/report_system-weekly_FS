@@ -221,3 +221,4 @@ class Basic_component:
 
         session_total = session_total_title.offset(column_offset=8)
         session_total.value = figure
+    

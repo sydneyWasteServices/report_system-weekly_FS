@@ -5,7 +5,11 @@ from data.operating_salary import Operating_salary as salary
 from data.mv_exp import Mv_exp as mv_exp
 from data.admin_exp import Admin_exp as admin_exp
 from data.bins_exp import Bins_exp as bins_exp
-from data.routes_info import Routes_info
+
+from data.routes_analysis_data.routes_info import Routes_info
+# from data.routes_analysis_data.all_routes_info import All_routes_info
+
+from data.rate import Rate
 
 from data_transform.WE_transform import WE_transform as dt_wet
 from revenue.revenue import Revenue as rev
@@ -23,15 +27,14 @@ import time
 # Start with df, suppose it is querying from Wed
 # dataframe in new downloaded folder
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
-
 # $ /c/Users/gordon/Desktop/
 
-booking_path = "../../ubuntuShareDrive/Datasets/booking/17.2.2021_24.2.2021.csv"
+booking_path = "../../ubuntuShareDrive/Datasets/booking_monthly/Mar_2021.csv"
 
 tipping_path = "../../ubuntuShareDrive/Datasets/tipping_data/TipRecords_17.02.2021_23.02.2021.csv"
 
-list_rev_types = ['TOTAL', 'GENERAL_WASTE',
-                  'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
+list_rev_types = ['GENERAL_WASTE',
+                  'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS', 'TOTAL']
 
 list_report_sheets = ['WEEKLY_SUMMARY', 'TOTAL', 'GENERAL_WASTE',
                       'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
@@ -47,11 +50,17 @@ resampled_df = rev().resample_by_7d(trans_df)
 
 date_keys = rev().date_keys(resampled_df)
 
+print(date_keys)
+print(len(date_keys))
+
 current_date = date_keys[0].date()
 
 df_by_date = rev().get_df_by(resampled_df, current_date)
 
 booking_df = Revenue_by_type(df_by_date)
+
+
+print(f"current_date is {current_date}")
 
 # =============================================================================================
 # Tipping report Dataframe
@@ -59,13 +68,15 @@ tipping_df = pd.read_csv(tipping_path)
 
 route_tipping = Routing_tipping()
 
-tipping_df = route_tipping().transform(tipping_df)
+tipping_df = route_tipping.transform(tipping_df)
 
-tipping_df = route_tipping().drop_no_docket(tipping_df)
+tipping_df = route_tipping.drop_no_docket(tipping_df)
 
+tipping_df = Routing_tipping(tipping_df)
 
-# ============================================================================================
+# ===========================================================================================
 
+# D:\Operations\PAIGE\Tonnes of PC & Co-mingle
 # TOTAL
 # GENERAL_WASTE
 # CARDBOARD
@@ -79,19 +90,29 @@ cb_inc = booking_df.total_inc('CARDBOARD')
 cm_inc = booking_df.total_inc('COMINGLED')
 sub_inc = booking_df.total_inc('SUBCONTRACTED')
 uos_inc = booking_df.total_inc('UOS')
-fr_inc = 57038  
-cb_rate = 100
+# rate data => General Waste, Cardboard, Comingle, Organics
+rate = Rate(275, 105, 190, 240)
+fr_inc = 57038
 
-current_op_inc = op_inc(total_inc, gw_inc, cb_inc, cm_inc, sub_inc, uos_inc, fr_inc, cb_rate)
-current_op_exp = op_exp(275,190,240,0.03,0.132,0.003)
+
+current_op_inc = op_inc(total_inc, gw_inc, cb_inc, cm_inc,
+                        sub_inc, uos_inc, fr_inc, rate.CARDBOARD)
+current_op_exp = (op_exp(
+    rate.GENERAL_WASTE,
+    rate.COMINGLED,
+    rate.ORGANICS,
+    0.03, 0.0132, 0.003))
 current_op_salary = salary(0.303)
-current_mv_exp = mv_exp(0.03,0.0046, 0.0086,0.0122,0.0178,0.013,0.0006,0.0039,0.012,0.0024)
-current_admin_exp = admin_exp(0.0218,0.011,0.0243)
+current_mv_exp = mv_exp(0.03, 0.0046, 0.0086, 0.0122,
+                        0.0178, 0.013, 0.0006, 0.0039, 0.012, 0.0024)
+current_admin_exp = admin_exp(0.0218, 0.011, 0.0243)
+current_bin_exp = bins_exp(0.0132)
 
 report_bc_tools = bc()
 
 wb = report_bc_tools.open_wb()
 
+# Add All Sheets
 report_bc_tools.add_sheets(wb, list_report_sheets)
 
 weekly_report = rt()
@@ -105,59 +126,39 @@ weekly_report = rt()
         current_op_exp,
         current_op_salary,
         current_mv_exp,
-        current_admin_exp
-        )
-)
-
-
-for rev_type_name in list_rev_types:
-
-    # Also use if to catch Total => list out all route income
-    total_routes_inc = booking_df.total_inc(rev_type_name)
-    routes_name = booking_df.routes_name(rev_type_name)
-    routes_inc = booking_df.routes_inc(rev_type_name)
-    routes_series = booking_df.routes_inc_series(rev_type_name)
-
-    # Tipping Dataframe
-    
-    
-    # RETURN dataframe => dataframe['weight'] or  dataframe['expOrRebate']
-    total_weight_rebateOrExp = route_tipping(tipping_df).total_weight_rebateOrExp(rev_type_name, )
-    # RETURN dataframe Key : routes number, values : [routes' weight, routes' expense or rebate
-    routes_weight_expOrRebate = route_tipping(tipping_df).routes_weight_expOrRebate(rev_type_name, )
-
-    
-    # list_rev_types = ['TOTAL', 'GENERAL_WASTE',
-    #               'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
-
-    
-
-
-    
-    routes_info_data = (Routes_info(
-        rev_type_name,
-        total_routes_inc,
-
-
-
-    ))
-
-    
-
-    (weekly_report
-        .by_rev_type(
-            wb,
-            rev_type_name,
-            current_date,
-            routes_info_obj)
+        current_admin_exp,
+        current_bin_exp
     )
-  
+ )
+
+def create_routes_info(rev_type : str):
+    total_inc = booking_df.total_inc(rev_type)
+    total_weight = tipping_df.routes_total_weight(rev_type)
+
+    routes_inc_series = booking_df.routes_inc_series(rev_type)
+    routes_weight_series = tipping_df.route_weight_series(rev_type)
+    route_info = Routes_info(rev_type, total_inc, total_weight, routes_inc_series, routes_weight_series)
+    return route_info
+    
+
+routes_info_data = [create_routes_info(rev_type) for rev_type in list_rev_types]
+
+[weekly_report.by_rev_type(wb, route_info_data.rev_type, current_date, route_info_data) for route_info_data in routes_info_data]
 
 
-# rev_routes_inc = [rev_type.routes_inc(rev_type_name) for rev_type_name in list_rev_types]
-# (weekly_report
-#     .by_rev_type())
+
+# self.rev_type = rev_type
+# self.total_inc = total_inc
+# self.total_weight = total_weight
+# self.booking_price_series = booking_price_series
+# self.tipping_weight_series = tipping_weight_series
 
 
-wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY_from_January_2021\\{str(current_date)}.xlsx')
-wb.close()
+
+
+# list_rev_types = ['GENERAL_WASTE',
+#                   'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS', 'TOTAL']
+
+
+# wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY\\{str(current_date)}.xlsx')
+# wb.close()
