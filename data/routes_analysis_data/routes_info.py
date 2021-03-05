@@ -12,7 +12,9 @@ class Routes_info:
         self.total_weight = total_weight
         self.booking_price_series = booking_price_series
         self.tipping_weight_series = tipping_weight_series
+        
 
+    
 # Pick routes weight & rate From series key
     
-    
+

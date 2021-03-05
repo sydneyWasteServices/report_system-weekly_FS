@@ -1,6 +1,48 @@
 Test for routes info
 
 
+# a = Routing_tipping()
+# df = a.drop_no_docket(df)
+# route_tip_df = a.transform(df)
+
+# route_tip = Routing_tipping(route_tip_df).routes_weight('CARDBOARD')
+
+# diff = Routing_tipping(route_tip_df).routes_diff('CARDBOARD')
+
+# print(route_tip)
+
+# list_rev_types = ['TOTAL', 'GENERAL_WASTE',
+#                   'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
+
+# list_report_sheets = ['WEEKLY_SUMMARY', 'TOTAL', 'GENERAL_WASTE',
+#                       'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
+
+
+# df = pd.read_csv(path, dtype={"Schd Time Start": str, "PO": str})
+
+# # Transform
+# trans_df = dt_wet().transform_and_clean_Route_num(df)
+# trans_df = dt_wet().transform_date(df)
+
+# # resample df by 7D
+# resampled_df = rev().resample_by_7d(trans_df)
+
+# date_keys = rev().date_keys(resampled_df)
+
+# current_date = date_keys[0].date()
+
+# print(current_date)
+
+# df_by_date = rev().get_df_by(resampled_df, current_date)
+
+# # df_by_date => 
+# rev_type = Revenue_by_type(df_by_date)
+
+# names = rev_type.routes_name('GENERAL_WASTE')
+# series = rev_type.routes_inc_series('GENERAL_WASTE')
+# incs = rev_type.routes_inc('GENERAL_WASTE')
+
+
     # Also use if to catch Total => list out all route income
     total_inc = booking_df.total_inc(rev_type_name)
     routes_inc = booking_df.routes_inc(rev_type_name)

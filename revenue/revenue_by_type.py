@@ -20,7 +20,6 @@ class Revenue_by_type(Revenue):
         return self.select_date_df[routes_row]
 
 
-
     def routes_name(
             self,
             rev_type: str):
