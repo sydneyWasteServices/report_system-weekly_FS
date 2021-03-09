@@ -29,9 +29,9 @@ import time
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
 # $ /c/Users/gordon/Desktop/
 
-booking_path = "../../ubuntuShareDrive/Datasets/booking_monthly/Mar_2021.csv"
+booking_path = "../../ubuntuShareDrive/Datasets/booking_monthly/Jan_2021.csv"
 
-tipping_path = "../../ubuntuShareDrive/Datasets/tipping_data/TipRecords_17.02.2021_23.02.2021.csv"
+tipping_path = "../../ubuntuShareDrive/Datasets/tipping_monthly/Jan_2021.csv"
 
 list_rev_types = ['GENERAL_WASTE',
                   'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS', 'TOTAL']
@@ -97,6 +97,7 @@ fr_inc = 57038
 
 current_op_inc = op_inc(total_inc, gw_inc, cb_inc, cm_inc,
                         sub_inc, uos_inc, fr_inc, rate.CARDBOARD)
+
 current_op_exp = (op_exp(
     rate.GENERAL_WASTE,
     rate.COMINGLED,
@@ -134,9 +135,11 @@ weekly_report = rt()
 def create_routes_info(rev_type : str):
     total_inc = booking_df.total_inc(rev_type)
     total_weight = tipping_df.routes_total_weight(rev_type)
-
+    
+    # routes_inc_series =>  returns numpy object
     routes_inc_series = booking_df.routes_inc_series(rev_type)
     routes_weight_series = tipping_df.route_weight_series(rev_type)
+    
     route_info = Routes_info(rev_type, total_inc, total_weight, routes_inc_series, routes_weight_series)
     return route_info
     
@@ -152,9 +155,6 @@ routes_info_data = [create_routes_info(rev_type) for rev_type in list_rev_types]
 # self.total_weight = total_weight
 # self.booking_price_series = booking_price_series
 # self.tipping_weight_series = tipping_weight_series
-
-
-
 
 # list_rev_types = ['GENERAL_WASTE',
 #                   'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS', 'TOTAL']

@@ -1,9 +1,10 @@
 import xlwings as xw
 import typing
 from report_outlook.component.complex_component import Complex_component
+from report_outlook.component.routes_analysis_component import Routes_analysis_component
 
 
-class Report_template(Complex_component):
+class Report_template(Complex_component, Routes_analysis_component):
     def __init__(self):
         super().__init__()
         return
@@ -31,7 +32,7 @@ class Report_template(Complex_component):
     # Table Headers
 
         op_tb_header = ["Ton", "Rate per Ton", "% of Total Operating Inc"]
-        
+
         no_tb_header = []
 
         super().report_formating(
@@ -122,11 +123,12 @@ class Report_template(Complex_component):
 
         pass
 # ===================================================================================
+
     def by_rev_type(self,
                     wb: object,
                     ws_name: str,
                     date: str,
-                    routes_info : object):
+                    routes_info: object):
 
         super().report_formating(
             wb,
@@ -138,7 +140,12 @@ class Report_template(Complex_component):
             date,
             "Weekly Financial Report Summary")
 
-        print(f"I am running at {routes_info.rev_type} {routes_info.total_weight}")
+
+        (
+            super()
+            .income_session(wb, ws_name, routes_info)
+            .weight_session(wb, ws_name, routes_info, 9)
+        )
 
         # route_op_inc
         # {

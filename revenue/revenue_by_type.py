@@ -64,7 +64,7 @@ class Revenue_by_type(Revenue):
                       .pipe(lambda data: data.sum())
                       )
             return result
-
+    # routes_inc_series =>  returns numpy object
     def routes_inc_series(
             self,
             rev_type: str):
@@ -72,7 +72,7 @@ class Revenue_by_type(Revenue):
         routes = Rev_types[rev_type].value
 
         if routes == "total":
-            result = self.select_date_df.Price.sum()
+            result = self.select_date_df.groupby('Route number').Price.sum()
             return result
         else:
             
