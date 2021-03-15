@@ -29,15 +29,24 @@ import time
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
 # $ /c/Users/gordon/Desktop/
 
-booking_path = "../../ubuntuShareDrive/Datasets/booking_monthly/Jan_2021.csv"
+booking_path = "../../ubuntuShareDrive/Datasets/booking_weekly/9th_2021.csv"
 
-tipping_path = "../../ubuntuShareDrive/Datasets/tipping_monthly/Jan_2021.csv"
+tipping_path = "../../ubuntuShareDrive/Datasets/tipping_weekly/9th_2021.csv"
 
 list_rev_types = ['GENERAL_WASTE',
-                  'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS', 'TOTAL']
+                  'CARDBOARD',
+                  'COMINGLED',
+                  'SUBCONTRACTED',
+                  'UOS',
+                  'TOTAL']
 
-list_report_sheets = ['WEEKLY_SUMMARY', 'TOTAL', 'GENERAL_WASTE',
-                      'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS']
+list_report_sheets = ['WEEKLY_SUMMARY',
+                      'TOTAL',
+                      'GENERAL_WASTE',
+                      'CARDBOARD',
+                      'COMINGLED',
+                      'SUBCONTRACTED',
+                      'UOS']
 
 df = pd.read_csv(booking_path, dtype={"Schd Time Start": str, "PO": str})
 
@@ -132,22 +141,65 @@ weekly_report = rt()
     )
  )
 
-def create_routes_info(rev_type : str):
+# ['GENERAL_WASTE', => GW
+# 'CARDBOARD', => CB
+# 'COMINGLED', => CM
+# 'SUBCONTRACTED', => Nothing
+# 'UOS', => GW
+# 'TOTAL']
+
+def create_routes_info(rev_type: str):
     total_inc = booking_df.total_inc(rev_type)
     total_weight = tipping_df.routes_total_weight(rev_type)
-    
+
     # routes_inc_series =>  returns numpy object
     routes_inc_series = booking_df.routes_inc_series(rev_type)
     routes_weight_series = tipping_df.route_weight_series(rev_type)
-    
-    route_info = Routes_info(rev_type, total_inc, total_weight, routes_inc_series, routes_weight_series)
+
+# ============================
+# Pick rate 
+    def rate_switcher(type_choice: str):
+        switcher = {
+            'GENERAL_WASTE': rate.GENERAL_WASTE,
+            'CARDBOARD' : rate.CARDBOARD ,
+            'COMINGLED' : rate.COMINGLED ,
+            'SUBCONTRACTED' : 0,
+            'UOS' : {
+                'GW': rate.GENERAL_WASTE,
+                'CB': rate.CARDBOARD,
+                'CO': rate.COMINGLED
+            },
+            'TOTAL' : 0
+            }
+        
+        return switcher.get(type_choice)
+
+    route_rate = rate_switcher(rev_type)
+# ============================
+    route_info = (
+        Routes_info(
+            rev_type,
+            total_inc,
+            total_weight,
+            routes_inc_series,
+            routes_weight_series,
+            route_rate)
+    )
+
     return route_info
-    
 
-routes_info_data = [create_routes_info(rev_type) for rev_type in list_rev_types]
 
-[weekly_report.by_rev_type(wb, route_info_data.rev_type, current_date, route_info_data) for route_info_data in routes_info_data]
+routes_info_data = [create_routes_info(rev_type)
+                    for rev_type in list_rev_types]
 
+(
+    [weekly_report
+     .by_rev_type(wb,
+                  route_info_data.rev_type,
+                  current_date,
+                  route_info_data)
+     for route_info_data in routes_info_data]
+)
 
 
 # self.rev_type = rev_type
@@ -160,5 +212,5 @@ routes_info_data = [create_routes_info(rev_type) for rev_type in list_rev_types]
 #                   'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS', 'TOTAL']
 
 
-# wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY\\{str(current_date)}.xlsx')
-# wb.close()
+wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY\\{str(current_date)}.xlsx')
+wb.close()
