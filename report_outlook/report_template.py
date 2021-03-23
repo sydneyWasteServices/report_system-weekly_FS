@@ -14,6 +14,7 @@ class Report_template(Complex_component, Routes_analysis_component):
             wb: object,
             ws_name: list,
             date: str,
+            endDate:str,
             op_inc: object = {},
             op_exp: object = {},
             op_salary: object = {},
@@ -25,6 +26,7 @@ class Report_template(Complex_component, Routes_analysis_component):
             wb,
             ws_name,
             date,
+            endDate,
             "Weekly Financial Report Summary")
 
     # Anchor Cell at B6
@@ -120,14 +122,42 @@ class Report_template(Complex_component, Routes_analysis_component):
         else:
             print("Bins expense items is empty")
             return 0
+# Small Temporary Modification on report
+        ws = wb.sheets[ws_name]
+# Headers
+    # Per Waste Edge App - Header
+        ws.range("M13").value = "Per Waste Edge"
+        ws.range("M13").api.Font.Size = 13
+        ws.range("M13").api.Font.Bold = True
+# Coloring the Weekly Summary
+    # GW color 230 184 183
+        ws.range("K13").color = (230,184,183)
+        ws.range("K26").color = (230,184,183)
+    # CB color 0 176 240
+        ws.range("K14").color = (0,176,240)
+    # CM color 255 255 0
+        ws.range("K15").color = (255,255,0)
+        ws.range("K27").color = (255,255,0)
+    # Sub 255 192 0
+        ws.range("K16").color = (255,192,0)
+        ws.range("K29").color = (255,192,0)
+        ws.range("K30").color = (255,192,0)
+    # UOS 177 160 199
+        ws.range("K17").color = (177,160,199)
+        ws.range("M17").color = (177,160,199)
+    # FR 146,205,220
+        ws.range("K18").color = (166,166,166)
+    # CB Rebate
+        ws.range("K19").color = (146,205,220)
 
-        pass
+    
 # ===================================================================================
 
     def by_rev_type(self,
                     wb: object,
                     ws_name: str,
                     date: str,
+                    endDate: str,
                     routes_info: object):
 
         super().report_formating(
@@ -138,6 +168,7 @@ class Report_template(Complex_component, Routes_analysis_component):
             wb,
             ws_name,
             date,
+            endDate,
             "Weekly Financial Report Summary")
 
 
@@ -145,6 +176,7 @@ class Report_template(Complex_component, Routes_analysis_component):
             super()
             .income_session(wb, ws_name, routes_info)
             .weight_session(wb, ws_name, routes_info, 9)
+            .gross_operating_margin(wb, ws_name, routes_info, 13)
         )
 
         # route_op_inc

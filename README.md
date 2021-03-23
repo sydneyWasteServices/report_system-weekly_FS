@@ -1,8 +1,31 @@
 # Report system
 
-#### important => Weekly reporting period from Wednesday to Tuesday
+#### important 
+            => Weekly reporting period from Wednesday to Tuesday
+        
+    ##### Data Frame notes
+            => Waste Edge Booking table's Price was not correct prior to 01 Jan 2020, 
+                since we were not using it to invoice our client.
+            => Some rows does not have Lat and Lng, will need to update its lat lng
+             
 
-    Date : 19.01.2021 
+
+    ### 19.3.2021
+        
+        ####Tipping Tonnage discrepancy 
+
+            There are discrepency between the actual tipping Ton(From Szue & ) and Waste Edge App tipping ton.
+
+            Roughly, General Waste has 13 to 20 tons less against the actual, and cardboard has around 10 tons.
+
+
+            
+
+    ### Date : 28.1.2021
+
+    Need to rearrange the app. 
+
+    ### Date : 19.01.2021 
 
     Description :
         This app is to generate weekly financial management report automatcatly, 
@@ -80,12 +103,9 @@
             Endpoint for Metadata infor => rev type information => 
                 End of the day build web app to manage internal data information
 
-### 28.1.2021
-
-    Need to rearrange the app. 
             
 
             
-### 2.02.2021
+
 
     

@@ -20,11 +20,15 @@ class Complex_component(Basic_component):
             wb: object,
             ws_name: str,
             date: str = "dd/mm/yyyy",
+            endDate: str = "dd/mm/yyyy",
             header: str = ""):
 
        
         super().header_title(wb, ws_name, header)
         super().date_title(wb, ws_name, date)
+        super().date_title(wb, ws_name, endDate, "End at", "A3")
+
+
 
     # items {gw: [["General Waste", "9000"], [0, 1]], cm }
     def session(self,
@@ -72,3 +76,6 @@ class Complex_component(Basic_component):
         end_cell = item_cells[-1]
 
         super().session_total(session_header, 0, end_cell)
+
+    
+        
