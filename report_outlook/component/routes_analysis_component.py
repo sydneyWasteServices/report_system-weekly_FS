@@ -22,7 +22,7 @@ class Routes_analysis_component:
         income_title_cell.value = f"{income_title} - Income"
 
         income_rate_cell = income_title_cell.offset(row_offset=1)
-        income_rate_cell.value = '%'
+        income_rate_cell.value = '% of Total income'
 
         # Income figure - left at 6 columns
         total_income_cell = income_title_cell.offset(column_offset=5)
@@ -87,7 +87,7 @@ class Routes_analysis_component:
         weight_title_cell.value = "Weight in Tons"
 
         weight_rate_cell = weight_title_cell.offset(row_offset=1)
-        weight_rate_cell.value = "%"
+        weight_rate_cell.value = "% of Total Weight"
 
         # total weight figure
         weight_title_cell.offset(column_offset=5).value = total_weight
@@ -193,10 +193,16 @@ class Routes_analysis_component:
 
                 total_gross_margin = routes_info.total_inc - (routes_info.total_weight * routes_info.rate)
 
-                route_gross_operating_margin_cell = self._routes_number_loc[route_num].offset(
+                route_gopm_cell = self._routes_number_loc[route_num].offset(
                     row_offset=rotues_position)
-                route_gross_operating_margin_portion_cell = self._routes_number_loc[route_num].offset(
+
+                route_gopm_rate_cell = self._routes_number_loc[route_num].offset(
                     row_offset=rotues_position+1)
+
+                gopm_portion_cells = self._routes_number_loc[route_num].offset(
+                    row_offset=rotues_position+2)
+
+
 
                 try:
                     route_expense = routes_info.tipping_weight_series[route_num] * routes_info.rate
@@ -208,18 +214,24 @@ class Routes_analysis_component:
                     routes_info
                         .booking_price_series[route_num] - route_expense)
 
+                route_gopm_cell.value = route_num_gross_operating_margin
 
-                route_gross_operating_margin_cell.value = route_num_gross_operating_margin
-                route_gross_operating_margin_portion_cell.value = route_num_gross_operating_margin / total_gross_margin
+                route_gopm_rate_cell.value = route_num_gross_operating_margin / routes_info.booking_price_series[route_num]
+
+                gopm_portion_cells.value = route_num_gross_operating_margin / total_gross_margin
 
             elif ws_name == 'CARDBOARD':
 
                 total_gross_margin = routes_info.total_inc + (routes_info.total_weight * routes_info.rate)
 
-                route_gross_operating_margin_cell = self._routes_number_loc[route_num].offset(
+                route_gopm_cell = self._routes_number_loc[route_num].offset(
                     row_offset=rotues_position)
-                route_gross_operating_margin_portion_cell = self._routes_number_loc[route_num].offset(
+
+                route_gopm_rate_cell = self._routes_number_loc[route_num].offset(
                     row_offset=rotues_position+1)
+
+                gopm_portion_cells = self._routes_number_loc[route_num].offset(
+                    row_offset=rotues_position+2)
 
 
                 try:
@@ -231,8 +243,12 @@ class Routes_analysis_component:
                     routes_info
                         .booking_price_series[route_num] + route_rebate)
 
-                route_gross_operating_margin_cell.value = route_num_gross_operating_margin
-                route_gross_operating_margin_portion_cell.value = route_num_gross_operating_margin / total_gross_margin
+                route_gopm_cell.value = route_num_gross_operating_margin
+
+                route_gopm_rate_cell.value = route_num_gross_operating_margin / routes_info.booking_price_series[route_num]
+
+                gopm_portion_cells.value = route_num_gross_operating_margin / total_gross_margin
+
 # ========================================================
 
 # Total Gross Operating Margin
@@ -248,13 +264,19 @@ class Routes_analysis_component:
         if ws_name == 'GENERAL_WASTE' or ws_name == 'COMINGLED':
             gross_operating_margin_cell = wb.sheets[ws_name].range(
                 (anchor_row, 2))
-            gross_operating_margin_cell.value = "Gross Operating Margin"
+            gross_operating_margin_cell.value = "Gross Operating Margin (GOPM)"
 
             gross_operating_margin_cell.offset(
                 column_offset=5).value = routes_info.total_inc - (routes_info.total_weight * routes_info.rate)
 
+
             gross_operating_margin_cell.offset(
-                row_offset=1).value = "%"
+                row_offset=1).value = "GOPM per Route"
+
+            gross_operating_margin_cell.offset(
+                row_offset=2).value = "% of Total GOPM"
+
+            
             
             [routes_gross_operating_margin(num) for num in routes_num]
 
@@ -266,8 +288,13 @@ class Routes_analysis_component:
             gross_operating_margin_cell.offset(
                 column_offset=5).value = routes_info.total_inc + (routes_info.total_weight * routes_info.rate)
 
+
             gross_operating_margin_cell.offset(
-                row_offset=1).value = "%"
+                row_offset=1).value = "GOPM per Route"
+
+            gross_operating_margin_cell.offset(
+                row_offset=2).value = "% of Total GOP"
+
 
             [routes_gross_operating_margin(num) for num in routes_num]
 
