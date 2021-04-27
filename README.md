@@ -7,7 +7,16 @@
             => Waste Edge Booking table's Price was not correct prior to 01 Jan 2020, 
                 since we were not using it to invoice our client.
             => Some rows does not have Lat and Lng, will need to update its lat lng
-             
+
+
+    ### Date : 12.4.2021 Visy - Include Visy in Weekly summary
+
+        We subcontracted from Visy by 2 runs
+
+            1. No Fees on 0 Act Amt
+            2. Every bins is fixed price of 
+                10.77 + GST
+            3. No Tipping fee is being charged
 
 
     ### 19.3.2021

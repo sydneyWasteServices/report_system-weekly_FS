@@ -116,3 +116,7 @@ def create_routes_info(rev_type : str):
     
 
 routes_info_data = [create_routes_info(rev_type) for rev_type in revenue_type_list]
+
+
+
+

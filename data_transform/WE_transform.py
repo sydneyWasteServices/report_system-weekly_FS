@@ -38,5 +38,4 @@ class WE_transform():
     # def sort_by_date_desc(self, df):
     #     return df.sort_values(by=['Date'], inplace=True, ascending=False)
 
-
-# df.sort(['Peak', 'Weeks'], ascending=[True, False], inplace=True)
+    # df.sort(['Peak', 'Weeks'], ascending=[True, False], inplace=True)

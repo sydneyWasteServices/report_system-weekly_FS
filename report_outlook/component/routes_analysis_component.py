@@ -277,7 +277,6 @@ class Routes_analysis_component:
                 row_offset=2).value = "% of Total GOPM"
 
             
-            
             [routes_gross_operating_margin(num) for num in routes_num]
 
         elif ws_name == 'CARDBOARD':

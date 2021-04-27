@@ -28,9 +28,10 @@ from datetime import timedelta
 # dataVault\waste_edge_booking_data\23.12.2020_to_26.1.2021
 # $ /c/Users/gordon/Desktop/
 
-booking_path = 'D:\\Run Analysis\\BLOB_STORAGE\\booking_weekly\\12th_2021.csv'
+booking_path = 'D:\\Run Analysis\\BLOB_STORAGE\\booking_weekly\\15th_2021.csv'
 
-tipping_path = 'D:\\Run Analysis\\BLOB_STORAGE\\tipping_weekly\\12th_2021.csv'
+tipping_path = 'D:\\Run Analysis\\BLOB_STORAGE\\tipping_weekly\\15th_2021.csv'
+
 
 list_rev_types = ['GENERAL_WASTE',
                   'CARDBOARD',
@@ -113,6 +114,8 @@ current_op_exp = (op_exp(
     rate.COMINGLED,
     rate.ORGANICS,
     0.03, 0.0132, 0.003))
+
+
 current_op_salary = salary(0.303)
 current_mv_exp = mv_exp(0.03, 0.0046, 0.0086, 0.0122,
                         0.0178, 0.013, 0.0006, 0.0039, 0.012, 0.0024)
@@ -212,7 +215,6 @@ routes_info_data = [create_routes_info(rev_type)
 
 # list_rev_types = ['GENERAL_WASTE',
 #                   'CARDBOARD', 'COMINGLED', 'SUBCONTRACTED', 'UOS', 'TOTAL']
-
 
 wb.save(f'D:\\Run Analysis\\WEEKLY_SUMMARY\\{str(current_date)}.xlsx')
 wb.close()

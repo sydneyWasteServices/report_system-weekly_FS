@@ -7,4 +7,3 @@ class Operating_salary:
             salary: float = 0.303):
         self.salary = [["Total Salary", salary], [0, 7]]
         
-
